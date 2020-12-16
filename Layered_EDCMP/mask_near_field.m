@@ -11,9 +11,14 @@ function mask_near_field(slip_model_mat,data_mat,fault_file,width_zone,obs_name)
     ve = los(:,4);   vn = los(:,5);  vz = los(:,6);    
     xx_tmp = xx;  yy_tmp = yy;  zout_tmp = zout;    % as a copy
 
-    lon_eq = -117.5;
-    lat_eq = 35.5;    
-    [xo,yo] = utm2ll(lon_eq,lat_eq,0,1);
+%     lon_eq = -117.5;
+%     lat_eq = 35.5;    
+%     [xo,yo] = utm2ll(lon_eq,lat_eq,0,1);
+    lon_eq = 72;
+    lat_eq = 38.5;
+    ref_lon = 71;
+    [xo,yo] = ll2xy(lon_eq,lat_eq,ref_lon);
+
     % read fault data
     fault_trace = load(fault_file);
     lonf = [fault_trace(:,1);fault_trace(:,3)];  
@@ -31,7 +36,8 @@ function mask_near_field(slip_model_mat,data_mat,fault_file,width_zone,obs_name)
     for ii = 1:LS
        slon = [lonf(ii) lonf(ii+LS)];
        slat = [latf(ii) latf(ii+LS)];
-       [xf,yf] = utm2ll(slon,slat,0,1);
+%        [xf,yf] = utm2ll(slon,slat,0,1);
+       [xf,yf] = ll2xy(slon,slat,ref_lon);
        xf = xf - xo;
        yf = yf - yo;
        line(xf,yf,'color','black','linewidth',1.5);
@@ -91,16 +97,17 @@ function mask_near_field(slip_model_mat,data_mat,fault_file,width_zone,obs_name)
     for ii = 1:LS
        slon = [lonf(ii) lonf(ii+LS)];
        slat = [latf(ii) latf(ii+LS)];
-       [xf,yf] = utm2ll(slon,slat,0,1);
+%        [xf,yf] = utm2ll(slon,slat,0,1);
+       [xf,yf] = ll2xy(slon,slat,ref_lon);
        xf = xf - xo;
        yf = yf - yo;
        line(xf,yf,'color','black','linewidth',1.5);
     end
     
-%     % save the observation points file as the input of EDCMP
-%     temp = [yy_tmp(:),xx_tmp(:)]';    % x is North in EDCMP
-%     fid = fopen([filepath,'/',obs_name,'.rec'],'w');
-%     fwrite(fid,temp,'real*4');
-%     fclose(fid);
+    % save the observation points file as the input of EDCMP
+    temp = [yy_tmp(:),xx_tmp(:)]';    % x is North in EDCMP
+    fid = fopen([filepath,'/',obs_name,'.rec'],'w');
+    fwrite(fid,temp,'real*4');
+    fclose(fid);
     
 end

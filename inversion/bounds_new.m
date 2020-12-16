@@ -1,4 +1,4 @@
-function [lb,ub]=bounds_new(NS,NT,tSm,add_col,fault_patch,smooth_patch)
+function [lb,ub]=bounds_new(NS,NT,tSm,add_col)
 % no slip larger than 10 m (default)
 % tailored constraints for each degree of freedom
 %F=2;   % degree of freedom (same as Mode)
@@ -10,8 +10,8 @@ function [lb,ub]=bounds_new(NS,NT,tSm,add_col,fault_patch,smooth_patch)
 
 %lb=-1e2*ones(NT*sum(tSm),1);  %lower bound
 %ub=1e2*ones(NT*sum(tSm),1);   %upper bound
-%Con=[-1 -1 0];  % Calico/Rodman slip 
-Con=[-1 0 0];  % Sign constraint; put 1 for positivity, -1 for
+% Con=[-1 -1 0];  % Calico/Rodman slip 
+Con=[1 0 0];  % Sign constraint; put 1 for positivity, -1 for
 %Con=[0 0 -1];  % Sign constraint; put 1 for positivity, -1 for
 %Con=[-1 0 -1];  % Sign constraint; put 1 for positivity, -1 for
               % negativity, 0 for no constraint
@@ -32,38 +32,42 @@ ub= 7e2*ones(NT*Npatch,1);  %upper bound
 lb(Npatch+1:2*Npatch) = -7e2;   % dominated by strike slip
 ub(Npatch+1:2*Npatch) = 7e2;
 
-fault_id = fault_patch(:,1);
-patch_layer = fault_patch(:,3);
-Ny = max(patch_layer);      % the number of bottom layer
+% % purely strike-slip
+% lb(Npatch+1:2*Npatch) = 0;
+% ub(Npatch+1:2*Npatch) = 0;
 
-% far field displacement should be zero
-far_fault = [1,5,6,7];  % id of fault segments to be constrained in far field
-for kk = 1:length(far_fault)
-    indx_far_fault = find(fault_id == far_fault(kk));
-    n_layer_this_fault = max(patch_layer(indx_far_fault));
-    patch_layer_fault = patch_layer(indx_far_fault);
-    count = 0;  
-    total_patch = length(find(fault_id < far_fault(kk)));
-    for jj = 1:n_layer_this_fault
-        if kk ~= 1
-            indx_patch_left = count+1;
-            lb(indx_patch_left+total_patch) = 0;         % strike component
-            lb(indx_patch_left+total_patch+Npatch) = 0;  % dip component
-            ub(indx_patch_left+total_patch) = 0;
-            ub(indx_patch_left+total_patch+Npatch) = 0;
-            sum_patch_this_layer = length(find(patch_layer_fault == jj));
-            count = count + sum_patch_this_layer;
-        else
-            sum_patch_this_layer = length(find(patch_layer_fault == jj));
-            count = count + sum_patch_this_layer;
-            indx_patch_right = count;
-            lb(indx_patch_right+total_patch) = 0;
-            lb(indx_patch_right+total_patch+Npatch) = 0;
-            ub(indx_patch_right+total_patch) = 0;
-            ub(indx_patch_right+total_patch+Npatch) = 0;
-        end
-    end
-end
+% fault_id = fault_patch(:,1);
+% patch_layer = fault_patch(:,3);
+% Ny = max(patch_layer);      % the number of bottom layer
+
+% % far field displacement should be zero
+% far_fault = [1,5,6,7];  % id of fault segments to be constrained in far field
+% for kk = 1:length(far_fault)
+%     indx_far_fault = find(fault_id == far_fault(kk));
+%     n_layer_this_fault = max(patch_layer(indx_far_fault));
+%     patch_layer_fault = patch_layer(indx_far_fault);
+%     count = 0;  
+%     total_patch = length(find(fault_id < far_fault(kk)));
+%     for jj = 1:n_layer_this_fault
+%         if kk ~= 1
+%             indx_patch_left = count+1;
+%             lb(indx_patch_left+total_patch) = 0;         % strike component
+%             lb(indx_patch_left+total_patch+Npatch) = 0;  % dip component
+%             ub(indx_patch_left+total_patch) = 0;
+%             ub(indx_patch_left+total_patch+Npatch) = 0;
+%             sum_patch_this_layer = length(find(patch_layer_fault == jj));
+%             count = count + sum_patch_this_layer;
+%         else
+%             sum_patch_this_layer = length(find(patch_layer_fault == jj));
+%             count = count + sum_patch_this_layer;
+%             indx_patch_right = count;
+%             lb(indx_patch_right+total_patch) = 0;
+%             lb(indx_patch_right+total_patch+Npatch) = 0;
+%             ub(indx_patch_right+total_patch) = 0;
+%             ub(indx_patch_right+total_patch+Npatch) = 0;
+%         end
+%     end
+% end
 
 % dip_id = 33;
 % total_patch = length(find(fault_id < dip_id));
@@ -72,15 +76,15 @@ end
 % lb(total_patch+1+Npatch:total_patch+4+Npatch) = 0;
 % ub(total_patch+1+Npatch:total_patch+4+Npatch) = 0;
 
-% zero bottom displacement
-indx_bottom = find(patch_layer == Ny);
-lb(indx_bottom) = 0;
-lb(indx_bottom+Npatch) = 0;
-ub(indx_bottom) = 0;
-ub(indx_bottom+Npatch) = 0;
+% % zero bottom displacement
+% indx_bottom = find(patch_layer == Ny);
+% lb(indx_bottom) = 0;
+% lb(indx_bottom+Npatch) = 0;
+% ub(indx_bottom) = 0;
+% ub(indx_bottom+Npatch) = 0;
 
-NS1=6;
-%NS1=NS;
+% NS1=6;
+NS1=NS;
 
 % for i=1:2
 %  k1=sum(tSm(1:i))+1;
@@ -119,45 +123,45 @@ end
 
 %return
    
-Con=[1 0 0];  % Sign constraint; put 1 for positivity, -1 for
-for i=NS1+1:NS1+2
- k1=sum(tSm(1:i))+1;
- k2=sum(tSm(1:i+1));
- for k=k1:k2
-     if Con(1) > 0, lb(k) = 0; end
-     if Con(2) > 0, lb(k+Npatch) = 0; end
-     if Con(1) < 0, ub(k) = 0; end
-     if Con(2) < 0, ub(k+Npatch) = 0; end     
-%   for j=1:NT
-%    ind=(k-1)*NT+j;
-%    if Con(nz(j)) > 0
-%     lb(ind)=0;
-%    elseif Con(nz(j)) < 0
-%     ub(ind)=0;
-%    end  
-%   end  
- end  
-end  
-
-Con=[-1 0 0];
-for i=NS1+3:NS
- k1=sum(tSm(1:i))+1;
- k2=sum(tSm(1:i+1));
- for k=k1:k2
-     if Con(1) > 0, lb(k) = 0; end
-     if Con(2) > 0, lb(k+Npatch) = 0; end
-     if Con(1) < 0, ub(k) = 0; end
-     if Con(2) < 0, ub(k+Npatch) = 0; end
-%   for j=1:NT
-%    ind=(k-1)*NT+j;
-%    if Con(nz(j)) > 0
-%     lb(ind)=0;
-%    elseif Con(nz(j)) < 0
-%     ub(ind)=0;
-%    end  
-%   end  
- end  
-end 
+% Con=[1 0 0];  % Sign constraint; put 1 for positivity, -1 for
+% for i=NS1+1:NS1+2
+%  k1=sum(tSm(1:i))+1;
+%  k2=sum(tSm(1:i+1));
+%  for k=k1:k2
+%      if Con(1) > 0, lb(k) = 0; end
+%      if Con(2) > 0, lb(k+Npatch) = 0; end
+%      if Con(1) < 0, ub(k) = 0; end
+%      if Con(2) < 0, ub(k+Npatch) = 0; end     
+% %   for j=1:NT
+% %    ind=(k-1)*NT+j;
+% %    if Con(nz(j)) > 0
+% %     lb(ind)=0;
+% %    elseif Con(nz(j)) < 0
+% %     ub(ind)=0;
+% %    end  
+% %   end  
+%  end  
+% end  
+% 
+% Con=[-1 0 0];
+% for i=NS1+3:NS
+%  k1=sum(tSm(1:i))+1;
+%  k2=sum(tSm(1:i+1));
+%  for k=k1:k2
+%      if Con(1) > 0, lb(k) = 0; end
+%      if Con(2) > 0, lb(k+Npatch) = 0; end
+%      if Con(1) < 0, ub(k) = 0; end
+%      if Con(2) < 0, ub(k+Npatch) = 0; end
+% %   for j=1:NT
+% %    ind=(k-1)*NT+j;
+% %    if Con(nz(j)) > 0
+% %     lb(ind)=0;
+% %    elseif Con(nz(j)) < 0
+% %     ub(ind)=0;
+% %    end  
+% %   end  
+%  end  
+% end 
 
 % local subsidence for smoothing patches
 % ub(smooth_patch+Npatch) = 0;

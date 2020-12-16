@@ -8,6 +8,7 @@ function detrend_range_offsets(filepath,losfile,rngfile,DEMfile,ramp_type,vararg
    this_track = filepath;  
    lon_eq = -117.5;
    lat_eq = 35.5;
+   ref_lon = lon_eq;
    res_max = 50;
    
    %% read varargin values and assembly
@@ -21,6 +22,8 @@ function detrend_range_offsets(filepath,losfile,rngfile,DEMfile,ramp_type,vararg
                        lat_eq = varargin{CC*2};
                    case 'misfit_range'
                        res_max = varargin{CC*2};
+                   case 'ref_lon'
+                       ref_lon = varargin{CC*2};
                end
            catch
                error('Unrecognized Keyword\n');
@@ -28,14 +31,16 @@ function detrend_range_offsets(filepath,losfile,rngfile,DEMfile,ramp_type,vararg
        end
    end
    
-   [xo,yo] = utm2ll(lon_eq,lat_eq,0,1);  
+%    [xo,yo] = utm2ll(lon_eq,lat_eq,0,1);  
+   [xo,yo] = ll2xy(lon_eq,lat_eq,ref_lon);
    [~,~,demin] = grdread2([this_track,'/',DEMfile]);       % usually dem_samp.grd
    [~,~,losin] = grdread2([this_track,'/',losfile]);       % usually los_cut.grd
    [lon,lat,rngin] = grdread2([this_track,'/',rngfile]);   % usually unwrap_sample_clean.grd
    res = rngin - losin;
    
    [mlon,mlat] = meshgrid(lon,lat);
-   [xsar,ysar] = utm2ll(mlon(:),mlat(:),0,1);
+%    [xsar,ysar] = utm2ll(mlon(:),mlat(:),0,1);
+   [xsar,ysar] = ll2xy(mlon(:),mlat(:),ref_lon);
    xsar = (xsar - xo) ./ 1000;   
    ysar = (ysar - yo) ./ 1000;
    demin = demin ./ 1000;
@@ -74,6 +79,7 @@ function detrend_range_offsets(filepath,losfile,rngfile,DEMfile,ramp_type,vararg
    colorbar
    title('Original offsets (cm)');
    set(gca,'Fontsize',20);
+   caxis([-res_max res_max]);
        
    subplot('Position',[0.53 0.55 0.45 0.4]);
    pcolor(xsar,ysar,rng_detrend);
@@ -82,6 +88,7 @@ function detrend_range_offsets(filepath,losfile,rngfile,DEMfile,ramp_type,vararg
    colorbar
    title('De-trended offsets (cm)');
    set(gca,'Fontsize',20);
+   caxis([-res_max res_max]);
    
    subplot('Position',[0.03 0.05 0.45 0.4]);
    pcolor(xsar,ysar,res);
@@ -90,16 +97,16 @@ function detrend_range_offsets(filepath,losfile,rngfile,DEMfile,ramp_type,vararg
    colorbar
    title('Residual of offset and LOS (cm)');
    set(gca,'Fontsize',20);
-   caxis([0 res_max]);
+   caxis([-50 50]);
        
    subplot('Position',[0.53 0.05 0.45 0.4]);
-   pcolor(xsar,ysar,res_detrend);
+   pcolor(xsar,ysar,ramp);
    shading flat
    colormap jet
    colorbar
    title('Fitting quadratic ramp (cm)');
    set(gca,'Fontsize',20);
-   caxis([-20 20]);
+   caxis([-50 50]);
    
    set(gcf,'PaperPositionMode','auto');
    grdwrite2(lon,lat,rng_detrend,[this_track,'/los_clean_detrend.grd']);

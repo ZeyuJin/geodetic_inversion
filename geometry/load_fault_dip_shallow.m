@@ -16,6 +16,7 @@ function slip_model = load_fault_dip_shallow(fault_segment_file,varargin)
    d2r = pi / 180;
    lon_eq = -117.5;
    lat_eq = 35.5;
+   ref_lon = lon_eq;
    
    %% Default geometric values for the shallow dipping fault
    zstart = 0;
@@ -60,7 +61,8 @@ function slip_model = load_fault_dip_shallow(fault_segment_file,varargin)
   
    fault_data = load(fault_segment_file);
    nflt = size(fault_data,1);              % number of dipping faults   
-   [xo,yo] = utm2ll(lon_eq,lat_eq,0,1);
+%    [xo,yo] = utm2ll(lon_eq,lat_eq,0,1);
+   [xo,yo] = ll2xy(lon_eq,lat_eq,ref_lon);
    
    % read depth of different dipping segments
    if length(dip_depth) ~= length(dip_change_id) && length(dip_depth) ~= 1
@@ -80,8 +82,11 @@ function slip_model = load_fault_dip_shallow(fault_segment_file,varargin)
        surface_lat_pt = [this_dip_segment(2);this_dip_segment(4)];
        dip_lon_pt = [this_dip_segment(5);this_dip_segment(7)]; 
        dip_lat_pt = [this_dip_segment(6);this_dip_segment(8)];
-       [surface_xutm,surface_yutm] = utm2ll(surface_lon_pt,surface_lat_pt,0,1);
-       [dip_xutm,dip_yutm] = utm2ll(dip_lon_pt,dip_lat_pt,0,1);
+%        [surface_xutm,surface_yutm] = utm2ll(surface_lon_pt,surface_lat_pt,0,1);
+%        [dip_xutm,dip_yutm] = utm2ll(dip_lon_pt,dip_lat_pt,0,1);
+       [surface_xutm,surface_yutm] = ll2xy(surface_lon_pt,surface_lat_pt,ref_lon);
+       [dip_xutm,dip_yutm] = ll2xy(dip_lon_pt,dip_lat_pt,ref_lon);
+       
        surface_xutm = surface_xutm - xo;  surface_yutm = surface_yutm - yo;
        dip_xutm = dip_xutm - xo;          dip_yutm = dip_yutm - yo;
        

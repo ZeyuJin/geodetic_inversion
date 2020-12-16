@@ -62,13 +62,13 @@ function detrend_from_inversion(slip_model_vs,slip_model_ds,detrend_file,varargi
         this_track = track{kk};
         [ramp_type,add_col] = detrend_ramp_type(ramp_array(kk));
         [Gl_raw,Gl,bdl_raw,bdl] = build_green_function(slip_model,[this_track,'/los_samp_uniform.mat'],data_type,ramp_type,model_type);
-        [Gp_raw,Gp,bp_raw,bp] = build_green_function(slip_model,'GPS/continue_GPS/continuous_gps_3d.mat','cgps',ramp_type,model_type,beta);
+        [Gp_raw,Gp,bp_raw,bp] = build_green_function(slip_model,'GPS/Floyd_GPS/Floyd_GPS_all.mat','camp_gps',ramp_type,model_type,beta);
         [Gs_raw,Gs,bs_raw,bs] = build_green_function(slip_model,'GPS/survey_GPS/survey_gps_2d.mat','camp_gps',ramp_type,model_type,3);
         [H,h1] = build_smooth_function(slip_model_vs,slip_model_ds,segment_file,intersect_file,ramp_type);
     
         G_raw = [Gl;Gp;Gs];                    Greens = [G_raw;H*lambda/h1];
         bd_raw = [bdl;bp;bs];                  bdata_sm = [bd_raw;zeros(h1,1)];
-        [lb,ub] = bounds_coarse_B(NS,NT,tSm,add_col,slip_model);   % do not add any boundary condition
+        [lb,ub] = bounds_coarse_A(NS,NT,tSm,add_col,slip_model);   % do not add any boundary condition
 
         % linear inversion
         options = optimset('LargeScale','on','DiffMaxChange',1e-1,'DiffMinChange',1e-12, ...
@@ -91,7 +91,7 @@ function detrend_from_inversion(slip_model_vs,slip_model_ds,detrend_file,varargi
         survey_gps_model = Gs_raw * u;
 
 %         plot_insar_model_resampled([this_track,'/los_samp_uniform.mat'],insar_model);
-        plot_gps_model('GPS/continue_GPS/continuous_gps_3d.mat',cgps_model,'data_type','cont');
+        plot_gps_model('GPS/Floyd_GPS/Floyd_GPS_all.mat',cgps_model,'data_type','survey');
         plot_gps_model('GPS/survey_GPS/survey_gps_2d.mat',survey_gps_model,'data_type','survey','site_name','GPS/survey_GPS/campaign_sites');
 
         %% plot the original/de-trended interferograms and ramp

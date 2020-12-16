@@ -12,6 +12,7 @@ set(0,'defaultAxesFontSize',15);
 iint=num2str(0);          % number of step in iterative sampling
 lon_eq = -117.5;
 lat_eq = 35.5;
+ref_lon = lon_eq;
 sample_area = [-118.8 -116 34.3 36.9];       % for uniform sample in larger area
 METHOD = 'quadtree';
 fault_file = '';
@@ -29,6 +30,13 @@ if ~isempty(varargin)
                     lat_eq = varargin{CC*2};
                 case 'fault'
                     fault_file = varargin{CC*2};
+                case 'area'
+                    sample_area = varargin{CC*2};
+                    if length(sample_area) ~= 4
+                        error('There is something wrong with the input area!');
+                    end
+                case 'ref_lon'
+                    ref_lon = varargin{CC*2};
             end
         catch
             error('Unrecognized Keyword');
@@ -88,7 +96,8 @@ fclose(fid);
 %% Do sampling
 % sigma=zeros(ntrack,1);
 % L=zeros(ntrack,1);
-[xo,yo] = utm2ll(lon_eq,lat_eq,0,1);
+% [xo,yo] = utm2ll(lon_eq,lat_eq,0,1);
+[xo,yo] = ll2xy(lon_eq,lat_eq,ref_lon);
 for k=1:ntrack
     this_track=track{k};
     [x1,y1,z1]=grdread2([this_track,'/',grd_file]);  % all data in CM unit
@@ -159,7 +168,8 @@ for k=1:ntrack
 %    Nmin = 3;   Nmax = 150;  for quad-tree sampling
 %    Nmin = Nmax = 15;        for uniform sampling
    [xout,yout,zout,Npt,rms_out,xx1,xx2,yy1,yy2]=make_insar_downsample(xin,yin,losin,this_npt,Nmin,Nmax,'mean');
-   [xutm_sar,yutm_sar] = utm2ll(xout,yout,0,1);
+%    [xutm_sar,yutm_sar] = utm2ll(xout,yout,0,1);
+   [xutm_sar,yutm_sar] = ll2xy(xout,yout,ref_lon);
    xsar=xutm_sar-xo;
    ysar=yutm_sar-yo; 
 %    covd = calc_insar_cov(xsar,ysar,this_sig,this_L);

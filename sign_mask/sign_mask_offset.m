@@ -26,7 +26,8 @@ function sign_mask_offset(this_track,offset_grid,varargin)
     colormap jet
     colorbar 
     axis([lonmin lonmax latmin latmax]);
-    title('Raw Offsets');
+    caxis([-200 200]);
+    title('Raw Detrended MAI');
     set(gca,'Fontsize',20);
 
     subplot(1,2,2); hold on
@@ -35,7 +36,8 @@ function sign_mask_offset(this_track,offset_grid,varargin)
     colormap jet
     colorbar
     axis([lonmin lonmax latmin latmax]);
-    title('Masked Azimuth offsets (ASC)');
+    caxis([-200 200]);
+    title('Sign Masked MAI');
     set(gca,'Fontsize',20);
     
     set(gcf,'PaperPositionMode','auto');

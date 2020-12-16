@@ -8,6 +8,7 @@ function resamp_insar_data(data_list,Nmin,Nmax,iter_step,varargin)
    iint=iter_step;
    lon_eq = -117.5;
    lat_eq = 35.5;
+   ref_lon = lon_eq;
    fault_file = '';
    Nlook = 1;
    data_type = 'insar';
@@ -27,6 +28,8 @@ function resamp_insar_data(data_list,Nmin,Nmax,iter_step,varargin)
                        Nlook = varargin{CC*2};
                    case 'data_type'
                        data_type = varargin{CC*2};
+                   case 'ref_lon'
+                       ref_lon = varargin{CC*2};
                end
            catch
                error('Unrecognized Keyword\n');
@@ -58,7 +61,8 @@ function resamp_insar_data(data_list,Nmin,Nmax,iter_step,varargin)
        tmp_txt = fgetl(fid);
    end     
    fclose(fid);
-   [xo,yo] = utm2ll(lon_eq,lat_eq,0,1);
+%    [xo,yo] = utm2ll(lon_eq,lat_eq,0,1);
+   [xo,yo] = ll2xy(lon_eq,lat_eq,ref_lon);
    
    % varigram=load('insar_varigram.mat');
    % sigma=varigram.sigma;
@@ -94,12 +98,17 @@ function resamp_insar_data(data_list,Nmin,Nmax,iter_step,varargin)
        end
        
        [xm1,ym1] = meshgrid(lon1,lat1);
-       [xutm,yutm] = utm2ll(xm1(:),ym1(:),0,1);
+%        [xutm,yutm] = utm2ll(xm1(:),ym1(:),0,1);
+       [xutm,yutm] = ll2xy(xm1(:),ym1(:),ref_lon);
        xin = xutm - xo;
        yin = yutm - yo;
        xin = reshape(xin,size(xm1));
        yin = reshape(yin,size(ym1));       
        slip_model_in = load('fault_M7.slip');
+%        slip_model_in = load('fault_M6.slip');
+%        tmp = load('resample/4_segments/homo_4data.mat');
+%        tmp = load('resample/misfit_include_MAI/homo_better_data.mat');
+%        slip_model_in = tmp.slip_model;
        
        if strcmp(data_type,'insar')
           los_model = slip2insar_okada(xin,yin,losl,zel,znl,zul,slip_model_in);   % fix the bug using multi-looked looking angles
@@ -114,7 +123,8 @@ function resamp_insar_data(data_list,Nmin,Nmax,iter_step,varargin)
        [lon_pt,lat_pt,ve]=make_look_downsample(lon1,lat1,zel,lon_model,lat_model,xx1,xx2,yy1,yy2);
        [lon_pt,lat_pt,vn]=make_look_downsample(lon1,lat1,znl,lon_model,lat_model,xx1,xx2,yy1,yy2);
        [lon_pt,lat_pt,vz]=make_look_downsample(lon1,lat1,zul,lon_model,lat_model,xx1,xx2,yy1,yy2);
-       [xutm,yutm]=utm2ll(lon_pt,lat_pt,0,1);
+%        [xutm,yutm]=utm2ll(lon_pt,lat_pt,0,1);
+       [xutm,yutm]=ll2xy(lon_pt,lat_pt,ref_lon);
        xpt=xutm-xo;
        ypt=yutm-yo;
        

@@ -19,7 +19,6 @@ function create_edcmp_input(slip_model_mat,data_mat,this_dir)
 
    %% create input files for unit slip of each patch (strike + dip)
    %% for the edcmp (included in layered_wang.m)
-
    % for ii = 1:ndata
    % this_dir = dirlist{ii};
    % sp = load([this_dir,'/los_samp3.mat']);

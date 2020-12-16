@@ -29,6 +29,7 @@ function [G_raw,G,bdata_raw,bdata] = build_green_function(slip_model,sampled_dat
                    G_raw = calc_green_insar_okada(slip_model,sampled_data);
                else
                    GG = load([filepath,'/layered_green.mat']);        % from EDCMP output
+%                    GG = load([filepath,'/modelB_layer.mat']);
                    G_raw = GG.G_raw;
                end
            else
@@ -36,6 +37,7 @@ function [G_raw,G,bdata_raw,bdata] = build_green_function(slip_model,sampled_dat
                    G_raw = calc_green_AZO_okada(slip_model,sampled_data);
                else
                    GG = load([filepath,'/layered_green.mat']);
+%                    GG = load([filepath,'/modelB_layer.mat']);
                    G_raw = GG.G_raw;
                end
            end
@@ -72,6 +74,7 @@ function [G_raw,G,bdata_raw,bdata] = build_green_function(slip_model,sampled_dat
                G_raw = calc_green_gps_3d_okada(slip_model,data_gps);
            else
                GG = load([filepath,'/layered_green.mat']);
+%                GG = load([filepath,'/modelB_layer.mat']);
                G_raw = GG.G_raw;
            end
                
@@ -102,6 +105,7 @@ function [G_raw,G,bdata_raw,bdata] = build_green_function(slip_model,sampled_dat
                G_raw = calc_green_gps_2d_okada(slip_model,data_gps);
            else
                GG = load([filepath,'/layered_green.mat']);
+%                GG = load([filepath,'/modelB_layer.mat']);
                G_raw = GG.G_raw;
            end
            

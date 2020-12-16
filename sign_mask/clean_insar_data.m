@@ -2,31 +2,56 @@ wavelength_C = 0.0554658*100;  % wavelength of C-band
 wavelength_L = 0.242452*100;   % wavelength of L-band
 scale = -4*pi;                 % for offsets data
 
-this_track = '/Users/zej011/Ridgecrest/data_resample/ASC64/branch_cut/three_subswath';
-insar_file = 'ASC64_0.2_cut.grd';
-mask_file = 'maskfile';
+% this_track = '/Users/zej011/coseismic/ASC100/LOS';
+% insar_file = 'unwrap_ll.grd';
+% mask_file = 'mask_txt';
+% mask_insar_phase(this_track,insar_file,mask_file,wavelength_C);
+
+this_track = '/Users/zej011/coseismic/ASC100/LOS2';
+insar_file = 'unwrap_ll.grd';
+mask_file = 'mask_txt';
 mask_insar_phase(this_track,insar_file,mask_file,wavelength_C);
 
-this_track = '/Users/zej011/Ridgecrest/data_resample/DES71/branch_cut/three_subswath';
-insar_file = 'DES71_0.1_cut.grd';
-mask_file = 'maskfile';
-mask_insar_phase(this_track,insar_file,mask_file,wavelength_C);
+% this_track = '/Users/zej011/coseismic/DES5/LOS';
+% insar_file = 'unwrap_ll.grd';
+% mask_file = 'mask_txt';
+% mask_insar_phase(this_track,insar_file,mask_file,wavelength_C);
 
-this_track = '/Users/zej011/Ridgecrest/data_resample/ALOS-2/T065/three_subswath';
-insar_file = 'A065_0.15_cut.grd';
-mask_file = 'maskfile';
-mask_insar_phase(this_track,insar_file,mask_file,wavelength_L);
+% this_track = '/Users/zej011/coseismic/ASC100/offsets';
+% insar_file = 'rng_off_filt_ll.grd';
+% mask_file = 'mask_txt';
+% mask_insar_phase(this_track,insar_file,mask_file,scale);
 
-this_track = '/Users/zej011/Ridgecrest/data_resample/ALOS-2/T066/three_subswath';
-insar_file = 'A066_0.1_cut.grd';
-mask_file = 'maskfile';
-mask_insar_phase(this_track,insar_file,mask_file,wavelength_L);
+% this_track = '/Users/zej011/coseismic/DES5/offsets';
+% insar_file = 'rng_off_filt_ll.grd';
+% mask_file = 'mask_txt';
+% mask_insar_phase(this_track,insar_file,mask_file,scale);
 
-this_track = '/Users/zej011/Ridgecrest/data_resample/ASC64/offsets';
-insar_file = 'ASC_rng_ll_finer.grd';
-mask_file = 'maskfile';
-mask_insar_phase(this_track,insar_file,mask_file,scale);
-% 
+% this_track = '/Users/zej011/coseismic/ALOS2_SCAN';
+% insar_file = 'unwrap_corrected_ll.grd';
+% mask_file = 'mask_txt';
+% mask_insar_phase(this_track,insar_file,mask_file,wavelength_L);
+
+% this_track = '/Users/zej011/coseismic/ALOS2_SCAN2';
+% insar_file = 'merge_unwrap_ll.grd';
+% mask_file = 'mask_txt';
+% mask_insar_phase(this_track,insar_file,mask_file,wavelength_L,'los_max',60);
+
+% this_track = '/Users/zej011/coseismic/ALOS2_stripe/range';
+% insar_file = 'rng_offset_ll.grd';
+% mask_file = 'mask_txt';
+% mask_insar_phase(this_track,insar_file,mask_file,scale);
+
+% this_track = '/Users/zej011/coseismic/ALOS2_stripe/azimuth';
+% insar_file = 'azi_offset_ll.grd';
+% mask_file = 'mask_txt';
+% mask_insar_phase(this_track,insar_file,mask_file,scale);
+
+% this_track = '/Users/zej011/coseismic/ALOS2_stripe/LOS';
+% insar_file = 'unwrap_ll.grd';
+% mask_file = 'mask_txt';
+% mask_insar_phase(this_track,insar_file,mask_file,wavelength_L);
+
 % [lon,lat,raw] = grdread2([this_track,'/',insar_file]);
 % [mlon,mlat] = meshgrid(lon,lat);
 % clean_left = load([this_track,'/clean_left.txt']);
@@ -43,10 +68,10 @@ mask_insar_phase(this_track,insar_file,mask_file,scale);
 % scale = -4*pi;       % because it is the offset not phase
 % mask_insar_phase(this_track,insar_file,mask_file,scale);
 % 
-this_track = '/Users/zej011/Ridgecrest/data_resample/DES71/offsets';
-insar_file = 'DES_rng_ll_finer.grd';
-mask_file = 'maskfile';
-mask_insar_phase(this_track,insar_file,mask_file,scale);
+% this_track = '/Users/zej011/Ridgecrest/data_resample/DES71/offsets';
+% insar_file = 'DES_rng_ll_finer.grd';
+% mask_file = 'maskfile';
+% mask_insar_phase(this_track,insar_file,mask_file,scale);
 % 
 % [lon,lat,raw] = grdread2([this_track,'/',insar_file]);
 % [mlon,mlat] = meshgrid(lon,lat);
@@ -61,10 +86,10 @@ mask_insar_phase(this_track,insar_file,mask_file,scale);
 % scale = -4*pi;       % because it is the offset not phase
 % mask_insar_phase(this_track,insar_file,mask_file,scale); 
 
-this_track = '/Users/zej011/Ridgecrest/data_resample/Cosmo_Skymed/ASC_offsets';
-insar_file = 'ASC_azi_filt.grd';
-mask_file = 'maskfile';
-mask_insar_phase(this_track,insar_file,mask_file,scale);
+% this_track = '/Users/zej011/Ridgecrest/data_resample/Cosmo_Skymed/ASC_offsets';
+% insar_file = 'ASC_azi_filt.grd';
+% mask_file = 'maskfile';
+% mask_insar_phase(this_track,insar_file,mask_file,scale);
 
 % [lon,lat,ASC_azi] = grdread2([this_track,'/',insar_file]);
 % [mlon,mlat] = meshgrid(lon,lat);
@@ -116,10 +141,10 @@ mask_insar_phase(this_track,insar_file,mask_file,scale);
 % caxis([-200 200]);
 % set(gcf,'PaperPositionMode','auto');
 
-this_track = '/Users/zej011/Ridgecrest/data_resample/Cosmo_Skymed/DES_offsets';
-insar_file = 'DES_azi_filt.grd';
-mask_file = 'maskfile';
-mask_insar_phase(this_track,insar_file,mask_file,scale);
+% this_track = '/Users/zej011/Ridgecrest/data_resample/Cosmo_Skymed/DES_offsets';
+% insar_file = 'DES_azi_filt.grd';
+% mask_file = 'maskfile';
+% mask_insar_phase(this_track,insar_file,mask_file,scale);
 
 % [lon,lat,DES_azi] = grdread2([this_track,'/',insar_file]);
 % [mlon,mlat] = meshgrid(lon,lat);

@@ -1,4 +1,4 @@
-function [lb,ub]=bounds_new_A(NS,NT,tSm,add_col)
+function [lb,ub]=bounds_new_M5(NS,NT,tSm,add_col)
 % no slip larger than 10 m (default)
 % tailored constraints for each degree of freedom
 %F=2;   % degree of freedom (same as Mode)
@@ -11,7 +11,7 @@ function [lb,ub]=bounds_new_A(NS,NT,tSm,add_col)
 %lb=-1e2*ones(NT*sum(tSm),1);  %lower bound
 %ub=1e2*ones(NT*sum(tSm),1);   %upper bound
 %Con=[-1 -1 0];  % Calico/Rodman slip 
-Con=[-1 0 0];  % Sign constraint; put 1 for positivity, -1 for
+% Con=[-1 0 0];  % Sign constraint; put 1 for positivity, -1 for
 %Con=[0 0 -1];  % Sign constraint; put 1 for positivity, -1 for
 %Con=[-1 0 -1];  % Sign constraint; put 1 for positivity, -1 for
               % negativity, 0 for no constraint
@@ -27,10 +27,10 @@ Con=[-1 0 0];  % Sign constraint; put 1 for positivity, -1 for
 %end  
 
 Npatch = sum(tSm);
-lb=-7e2*ones(NT*Npatch,1);  %lower bound in cm
-ub= 7e2*ones(NT*Npatch,1);  %upper bound
-lb(Npatch+1:2*Npatch) = -7e2;   % dominated by strike slip
-ub(Npatch+1:2*Npatch) = 7e2;
+lb=-2e1*ones(NT*Npatch,1);  %lower bound in cm
+ub= 2e1*ones(NT*Npatch,1);  %upper bound
+% lb(Npatch+1:2*Npatch) = -1e1;   % dominated by strike slip
+% ub(Npatch+1:2*Npatch) = 1e1;
 
 % fault_id = slip_model(:,1);
 % patch_layer = slip_model(:,3);
@@ -121,8 +121,8 @@ ub(Npatch+1:2*Npatch) = 7e2;
 % ub(indx_bottom_this_ID) = 0;
 % ub(indx_bottom_this_ID+Npatch) = 0;
 
-NS1=6;
-% NS1=NS;
+NS1=1;
+%NS1=NS;
 
 % for i=1:2
 %  k1=sum(tSm(1:i))+1;
@@ -139,7 +139,7 @@ NS1=6;
 %  end  
 % end  
 
-%Con=[1 1 0];  % Sign constraint; put 1 for positivity, -1 for
+Con=[-1 -1 0];   % normal slip first, then right-lateral slip
 for i=1:NS1
  k1=sum(tSm(1:i))+1;
  k2=sum(tSm(1:i+1));
@@ -147,59 +147,41 @@ for i=1:NS1
      if Con(1) > 0, lb(k) = 0; end
      if Con(2) > 0, lb(k+Npatch) = 0; end
      if Con(1) < 0, ub(k) = 0; end
-     if Con(2) < 0, ub(k+Npatch) = 0; end
-%   for j=1:NT
-%    ind=(k-1)*NT+j;
-%    if Con(nz(j)) > 0
-%     lb(ind)=0;
-%    elseif Con(nz(j)) < 0
-%     ub(ind)=0;
-%    end  
-%   end  
+     if Con(2) < 0, ub(k+Npatch) = 0; end 
  end  
 end  
 
-% lb(Npatch+1:end) = 0;
-% ub(Npatch+1:end) = 0;
 %return
    
-Con=[1 0 0];  % Sign constraint; put 1 for positivity, -1 for
-for i=NS1+1:NS1+2
- k1=sum(tSm(1:i))+1;
- k2=sum(tSm(1:i+1));
- for k=k1:k2
-     if Con(1) > 0, lb(k) = 0; end
-     if Con(2) > 0, lb(k+Npatch) = 0; end
-     if Con(1) < 0, ub(k) = 0; end
-     if Con(2) < 0, ub(k+Npatch) = 0; end     
-%   for j=1:NT
-%    ind=(k-1)*NT+j;
-%    if Con(nz(j)) > 0
-%     lb(ind)=0;
-%    elseif Con(nz(j)) < 0
-%     ub(ind)=0;
-%    end  
-%   end  
- end  
-end  
-
+% Con=[1 0 0];  % Sign constraint; put 1 for positivity, -1 for
+% for i=NS1+1:NS1+2
+%  k1=sum(tSm(1:i))+1;
+%  k2=sum(tSm(1:i+1));
+%  for k=k1:k2
+%      if Con(1) > 0, lb(k) = 0; end
+%      if Con(2) > 0, lb(k+Npatch) = 0; end
+%      if Con(1) < 0, ub(k) = 0; end
+%      if Con(2) < 0, ub(k+Npatch) = 0; end     
+% %   for j=1:NT
+% %    ind=(k-1)*NT+j;
+% %    if Con(nz(j)) > 0
+% %     lb(ind)=0;
+% %    elseif Con(nz(j)) < 0
+% %     ub(ind)=0;
+% %    end  
+% %   end  
+%  end  
+% end  
+% 
 Con=[-1 0 0];
-for i=NS1+3:NS
+for i=NS1+1:NS
  k1=sum(tSm(1:i))+1;
  k2=sum(tSm(1:i+1));
  for k=k1:k2
      if Con(1) > 0, lb(k) = 0; end
      if Con(2) > 0, lb(k+Npatch) = 0; end
      if Con(1) < 0, ub(k) = 0; end
-     if Con(2) < 0, ub(k+Npatch) = 0; end
-%   for j=1:NT
-%    ind=(k-1)*NT+j;
-%    if Con(nz(j)) > 0
-%     lb(ind)=0;
-%    elseif Con(nz(j)) < 0
-%     ub(ind)=0;
-%    end  
-%   end  
+     if Con(2) < 0, ub(k+Npatch) = 0; end  
  end  
 end 
 

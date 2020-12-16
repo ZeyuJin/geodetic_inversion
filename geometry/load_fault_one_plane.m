@@ -6,6 +6,7 @@ function slip_model = load_fault_one_plane(fault_segment_file,varargin)
     d2r=pi/180;
     lon_eq = -117.5;
     lat_eq = 35.5;
+    ref_lon = lon_eq;
 
     %% Default geometric values for the vertical fault
     slip_model = [];
@@ -48,6 +49,8 @@ function slip_model = load_fault_one_plane(fault_segment_file,varargin)
                         zstart = varargin{CC*2};
                     case 'dip'
                         dip = varargin{CC*2};
+                    case 'ref_lon'
+                        ref_lon = varargin{CC*2};
                 end
             catch
                 error('Unrecognized Keyword\n');
@@ -56,13 +59,15 @@ function slip_model = load_fault_one_plane(fault_segment_file,varargin)
     end
     
     %% read fault data
-    [xo,yo] = utm2ll(lon_eq,lat_eq,0,1);
+%     [xo,yo] = utm2ll(lon_eq,lat_eq,0,1);
+    [xo,yo] = ll2xy(lon_eq,lat_eq,ref_lon);
     fault_data = load(fault_segment_file);
     lon_pt = [fault_data(:,1);fault_data(:,3)];
     lat_pt = [fault_data(:,2);fault_data(:,4)];
     nflt = size(fault_data,1);
 
-    [xutm_pt,yutm_pt]=utm2ll(lon_pt,lat_pt,0,1);
+%     [xutm_pt,yutm_pt]=utm2ll(lon_pt,lat_pt,0,1);  % use ll2xy.m instead
+    [xutm_pt,yutm_pt]=ll2xy(lon_pt,lat_pt,ref_lon);
     xpt=xutm_pt-xo;
     ypt=yutm_pt-yo;   
     

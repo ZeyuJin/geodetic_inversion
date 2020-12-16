@@ -8,9 +8,9 @@ function [H,h1,indx_less_smooth_patch] = build_smooth_function(slip_model_vs,sli
    slip_model = [slip_model_vs;slip_model_ds];
    slip_model(:,2)=[1:size(slip_model,1)]';   % recomputed finally to combine all the fault segments
    
-   [H_plane,~] = smoo1_each_plane(slip_model);
+   [H_plane,~] = smoo1_each_plane(slip_model,'fdip',15);
    if ~isempty(segment_file)
-       H_segment = smoo1_segments(slip_model,segment_file);
+       H_segment = smoo1_segments(slip_model,segment_file,'fdip',15);
    else
        H_segment = [];
    end
@@ -60,38 +60,39 @@ function [H,h1,indx_less_smooth_patch] = build_smooth_function(slip_model_vs,sli
 %           tmp = tmp_patch(indx_shallow_two);
           indx_dip_patch = [indx_dip_patch;tmp_patch];
       end
-%       disp(indx_dip_patch);
-%       indx_vertical_patch = [1:3,21:23,36:38,76:80,87:88]';
-        indx_vertical_patch = [1:3,21:23,36:38,76:80]';
-%       indx_vertical_patch = [1:3,21:23,76:79]';
-        indx_less_smooth_patch = [indx_vertical_patch;indx_dip_patch];
-        tmp = [85:111];
-        indx_more_smooth_patch = [tmp,tmp+Np]';    % add more smoothing of segment 3
+%       indx_less_smooth_patch = indx_dip_patch;
+
+% %       disp(indx_dip_patch);
+% %       indx_vertical_patch = [1:3,21:23,36:38,76:80,87:88]';
+%         indx_vertical_patch = [1:3,21:23,36:38,48:49,76:80,94]';   % for model A & B
+% %         indx_vertical_patch = [1:3,22:24,38:40,50:51,79:82]';   % test for model C
+%         indx_less_smooth_patch = [indx_vertical_patch;indx_dip_patch];
+%         tmp = 85:111;
+%         indx_more_smooth_patch = [tmp,tmp+Np]';    % add more smoothing of segment 3
+%       
+% %       tmp = [1:Np/2];
+% %       indx_more_smooth_patch = [tmp,tmp+Np]';     
+      indx_more_smooth_patch = [];
       
       for ii = 1:h1
           indx_nonzero = find(H(ii,:));
           if length(indx_nonzero) ~= 2
              error('There are more than 2 elements in each row of smoothing matrix');
-          end
-          
-          % reduce the partition effect on segment 3
-          if ismember(indx_nonzero(1),indx_more_smooth_patch) || ismember(indx_nonzero(2),indx_more_smooth_patch)
-              H(ii,indx_nonzero) = H(ii,indx_nonzero) .* 2;
-          end          
+          end        
           
           if max(indx_nonzero) < Np, continue; end    % skip the constraint on the strike component          
           left_nonzero = indx_nonzero(1) - Np;        % find only dip components
           right_nonzero = indx_nonzero(2) - Np;  
           if ismember(left_nonzero,indx_less_smooth_patch) && ismember(right_nonzero,indx_less_smooth_patch)
               ratio = max(abs(H(ii,indx_nonzero)));
-              H(ii,indx_nonzero) = H(ii,indx_nonzero) ./ 5; % ratio;
-%               disp(indx_nonzero-Np);
+              H(ii,indx_nonzero) = H(ii,indx_nonzero) ./ ratio;
           end
           
-%           % check the smoothing matrix of modelB
-%           if indx_nonzero(1)-Np == 449 || indx_nonzero(2)-Np == 449 || indx_nonzero(1)-Np == 450 || indx_nonzero(2)-Np == 450
-%               disp(indx_nonzero);
-%           end
+          % reduce the partition effect on segment 1
+          if ismember(indx_nonzero(1),indx_more_smooth_patch) || ismember(indx_nonzero(2),indx_more_smooth_patch)
+              H(ii,indx_nonzero) = H(ii,indx_nonzero) .* 1.5;
+%               H(ii,indx_nonzero) = H(ii,indx_nonzero) .* 1.2;
+          end       
       end
    end  
       
@@ -107,11 +108,4 @@ function [H,h1,indx_less_smooth_patch] = build_smooth_function(slip_model_vs,sli
    end
    H = [H,rmp];
    
-%    % just for test smoothing index
-%    for kk = 1:h1
-%        tmp = find(H(kk,:));
-%        if tmp(1) == 81 || tmp(2) == 81
-%            disp(tmp);
-%        end
-%    end
 end

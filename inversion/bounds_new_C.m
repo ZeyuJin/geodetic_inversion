@@ -1,4 +1,4 @@
-function [lb,ub]=bounds_new_B(NS,NT,tSm,add_col,slip_model)
+function [lb,ub]=bounds_new_C(NS,NT,tSm,add_col,slip_model)
 % no slip larger than 10 m (default)
 % tailored constraints for each degree of freedom
 %F=2;   % degree of freedom (same as Mode)
@@ -38,7 +38,7 @@ patch_layer = slip_model(:,3);
 Ny = max(patch_layer);      % the number of bottom layer
 
 % far field displacement should be zero
-far_fault = [1,5,9,10];  % id of fault segments to be constrained in far field
+far_fault = [1,5,9,10];   % id of fault segments to be constrained in far field
 for kk = 1:length(far_fault)
     indx_far_fault = find(fault_id == far_fault(kk));
     n_layer_this_fault = max(patch_layer(indx_far_fault));

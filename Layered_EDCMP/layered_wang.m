@@ -1,4 +1,4 @@
-function [ux, uy, uz] = layered_wang(xs, ys, zs, strike, dip, rake, slip, L, W, xr, yr,data_dir,count)				       				       
+function U = layered_wang(xs,ys,zs,strike,dip,rake,slip,L,W,NR,data_dir,green_dir,count,varargin)				       				       
 %[ux, uy, uz] = layered_disloc(xs, ys, zs, strike, dip, rake,
 %                              slip, L, W, npw, npy, xr, yr, edks)
 % --- INPUT ---
@@ -27,20 +27,35 @@ function [ux, uy, uz] = layered_wang(xs, ys, zs, strike, dip, rake, slip, L, W, 
 % uy     m, west displacement
 % uz     m, up displacement (+ up)
 
-% np   = length(xs); % number of patches
-np = 1;
-nrec = length(xr); % number of receivers
-dpath = '.';
+np = length(xs); % number of patches
+% np = 1;
+% nrec = length(xr); % number of receivers
+nrec = NR;
+
+% output file is displacement or strain or stress or tilt
+out_type = 'disp';
+obs_type = 0;      % default is irregular observation points
+obs_arr = [];      % observation array boundaries, in format of [xr1,yr1,xr2,yr2];  
+if ~isempty(varargin)
+    for CC = 1:floor(length(varargin)/2)
+        try
+            switch lower(varargin{CC*2-1})
+                case 'out_file'
+                    out_type = varargin{CC*2};
+                case 'obs_type'
+                    obs_type = varargin{CC*2};
+                case 'obs_arr'
+                    obs_arr = varargin{CC*2};
+            end
+        catch
+            error('Unrecognized Keyword');
+        end
+    end
+end
 
 %%%%% filenames
 pref = 'ridge';
-
-fedc = fopen([dpath,'/',data_dir,'/edcmp_ridge_',num2str(count),'.inp'],'wt');
-
-%fprintf(fedc,['#TYP   LONCEN      LATCEN       DCEN      STR' ...
-%	      '       DIP       HORLEN    DIPLEN    SS(m)    DS(m)' ...
-%	       '  OP(m) RAKE\n']);
-
+fedc = fopen([data_dir,'/edcmp_ridge',num2str(count),'.inp'],'wt');
 fprintf(fedc,['#===============================================================================\n' ...
 '# OBSERVATION ARRAY\n' ...
 '# =================\n' ...
@@ -65,15 +80,22 @@ fprintf(fedc,['#================================================================
 '#    Note that the total number of observation positions (nr or nxr*nyr)\n' ...
 '#    should be <= NRECMAX (see edcglobal.h)!\n' ...
 '#=============================================================================== \n']);
-fprintf(fedc,' 0 \n');
-fprintf(fedc,' %d \n',nrec);
-% for i=1:nrec
-%     fprintf(fedc,' ( %e , %e ) \n',yr(i),xr(i));  % x is North in edcmp
-% end 
-
+fprintf(fedc,' %d \n',obs_type);
+if obs_type == 0 || obs_type == 1
+    fprintf(fedc,' %d \n',nrec);
+    if obs_type == 1
+        fprintf(fedc,'(%.2e, %.2e), (%.2e, %.2e)\n',obs_arr(2),obs_arr(1),obs_arr(4),obs_arr(3));
+    end
+elseif obs_type == 2
+    if length(nrec) ~= 2, error('Something wrong with receiver points!'); end
+    fprintf(fedc,' %d  %.2e  %.2e\n',nrec(1),obs_arr(2),obs_arr(4));
+    fprintf(fedc,' %d  %.2e  %.2e\n',nrec(2),obs_arr(1),obs_arr(3));
+else 
+    error('There is something wrong with observation type');
+end
 
 % binary observation points file to be read into EDCMP
-file_rec = [data_dir,'.rec'];
+% file_rec = [data_dir,'.rec'];
 
 %%%%% write receiver location file (observation points)
 % temp = [yr(:), xr(:)]';   % x is North in edcmp
@@ -94,9 +116,19 @@ fprintf(fedc,['#================================================================
 '#    Note that all file or directory names should not be longer than 80\n' ...
 '#    characters. Directories must be ended by / (unix) or \\ (dos) \n' ...
 '#===============================================================================\n']);
-outdir=['''./',data_dir,'/outdata/''']; 
+outdir=['''',data_dir,'/outdata/''']; 
 fprintf(fedc,' %s \n',outdir);
-fprintf(fedc,'        1               0              0              0 \n');
+if strcmp(out_type,'disp')
+   fprintf(fedc,'        1               0              0              0 \n');
+elseif strcmp(out_type,'strn')
+   fprintf(fedc,'        0               1              0              0 \n');
+elseif strcmp(out_type,'strs')
+   fprintf(fedc,'        0               0              1              0 \n');
+elseif strcmp(out_type,'tilt')
+   fprintf(fedc,'        0               0              0              1 \n');
+else
+   error('There is something wrong with output file type!');
+end
 fdisp=['''',pref,'.disp''']; 
 fstrn=['''',pref,'.strn''']; 
 fstrs=['''',pref,'.strs''']; 
@@ -125,7 +157,7 @@ fprintf(fedc,['#= ==============================================================
 '#                :90 \\  S .                  \\ t\n' ...
 '#                |-dip\\  .                    \\ h\n' ...
 '#                :     \\. | rake               \\ \n' ...
-'#                Z      -------------------------\n' ...
+'#                Z      -------------------------\n' ...`
 '#                              L e n g t h\n' ...
 '#\n' ...
 '#    Note that if one of the parameters length and width = 0, then a line source\n' ...
@@ -165,27 +197,49 @@ fprintf(fedc,['#================================================================
 '#===============================================================================\n']);
 
 fprintf(fedc,' 1 \n');
+% fprintf(fedc,' 0 \n');
 fss=['''',pref,'.ss''']; 
 fds=['''',pref,'.ds''']; 
 fop=['''',pref,'.cl''']; 
-fgrn='''./edgrnfcts/'''; 
+% fgrn='''./edgrnfcts/'''; 
+fgrn = ['''',green_dir,''''];
 fprintf(fedc,' %s   %s   %s   %s \n', fgrn, fss, fds, fop);
+% fprintf(fedc,' 0.00d+03  3.00d+10  3.00d+10 \n');
 
 status = fclose(fedc);
 disp(status);
 			   
 
 %%%%% call sum_layered to calculate Greens functions
-
-comstr = ['/home4/zjin2/software/edgrn_escmp/edcmp ',data_dir,'/edcmp_ridge_',num2str(count),'.inp ',data_dir,'/',data_dir,' >& log'];
-% disp(comstr);
+if obs_type == 0
+    comstr = ['/Users/zej011/work/software/edgrn_edcmp_2003/edcmp2.0 ',data_dir, ...
+              '/edcmp_ridge',num2str(count),'.inp ',data_dir,'/full_obs'];
+else
+    comstr = ['/Users/zej011/work/software/edgrn_edcmp_2003/edcmp2.0 ',data_dir, ...
+              '/edcmp_ridge',num2str(count),'.inp '];
+end
+disp(comstr);
 system(comstr);
 
-%%%%% read sum_layered output Greens function
+output_str = ['awk ''NR>3 {print $0}'' ',data_dir,'/outdata/',pref,'.',out_type,' > ', ...
+               data_dir,'/outdata/data_only'];
+system(output_str);
 
-out = load([data_dir,'/outdata/',pref,'.disp']); 
-ux=out(:,5);
-uy=out(:,4);
-uz=-out(:,6);
+%%%%% read sum_layered output Greens function
+out = load([data_dir,'/outdata/data_only']); 
+if strcmp(out_type,'disp')
+    ux = out(:,4);
+    uy = out(:,3);
+    uz = -out(:,5);
+    U = [ux,uy,uz];
+elseif strcmp(out_type,'strs')
+    Sxx = out(:,3);
+    Syy = out(:,4);
+    Szz = out(:,5);
+    Sxy = out(:,6);
+    Syz = out(:,7);
+    Szx = out(:,8);
+    U = [Sxx,Syy,Szz,Sxy,Szx,Syz];
+end
 
 end
