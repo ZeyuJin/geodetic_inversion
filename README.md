@@ -24,7 +24,7 @@ Then the subroutine runs as (inside clean_insar_data.m):
 % detrend = 1 means that you apply for a detrend with the topography
 mask_insar_phase(this_track, insar_file, mask_file, scale, 'los_max', 80, 'detrend', 0);
 ```
-This step would generate a subsampled grid file called "unwrap_clean_sample.grd", in 100 meters resolution as default.
+This step would output a subsampled grid file called "unwrap_clean_sample.grd", in 100 meters resolution as default.
 
 ### Step 2: detrend the phase and remove the phase ambiguity
 If we have enough far-field GPS data, we could use those GPS data to invert a coarse slip model to detrend the unwrapped phase. \
@@ -51,3 +51,17 @@ cd(this_track);
 movefile los_clean_detrend.grd los_clean_unmask.grd
 sign_mask_offset(this_track, 'los_clean_unmasked.grd');
 ```
+
+---
+## Step 3 ~ 4 are written in the file main_detrend_inversion.m
+### Step 3: apply quad-tree sampling to all detrended data (LOS/RNG/AZO)
+- `fault_file`: file that writes linearized fault segments (Format: lon1  lat1  lon2  lat2, each pair correponds to one fault end)
+- `area = [71.8 73.9 37.7 39.1]`: rectangular area that crops the InSAR grid file
+- `los_list`: list of InSAR directories that are to be downsampled (Format: this_track, number_of_sampled_points(e.g.,3000))
+- `Nmin = 2`: Minimum size of points to be averaged (Nmin x Nmin).
+- `Nmax = 400`: Maximum size of points to be averaged (Nmax x Nmax).
+```MATLAB
+make_insar_data(los_list, Nmin, Nmax, 'method', 'quadtree', 'fault', fault_file, 'ref_lon', ref_lon, 'area', area, 'lonc', lonc, 'latc', latc);
+```
+**Note: If your minimum size of slip patch is 1km, your smallest resolution cell is 300m * 300m, that is, you should keep at least 3 points within one patch
+distance in order to catch the curve gradient**
