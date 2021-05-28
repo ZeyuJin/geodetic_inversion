@@ -153,5 +153,5 @@ Tha parameters are the same as Step 5.
 9. Strike angle of each patch
 10. Dip angle of each patch
 11. Topography on the top surface of each patch
-12. Strike-slip of each patch
-13. Dip-slip of each patch
+12. Strike-slip of each patch (default is cm)
+13. Dip-slip of each patch (default is cm)
