@@ -65,3 +65,7 @@ make_insar_data(los_list, Nmin, Nmax, 'method', 'quadtree', 'fault', fault_file,
 ```
 **Note: If your minimum size of slip patch is 1km, your smallest resolution cell is 300m * 300m, that is, you should keep at least 3 points within one patch
 distance in order to catch the curve gradient**
+
+### Step 4: inversion using first downsampled data
+- `fault_file`: The fault ID is counted based on the order of fault segments written in `fault_file`, all fault segments have a default dip angle of 90 degrees.
+- `dip_change_id`: 
