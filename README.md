@@ -5,6 +5,7 @@ This repo homogeneous/layered inversion using InSAR/GPS
 ## Step 1 ~ 2 are written in the file main_detrend_inversion.m
 ### Step 0: setup your MATLAB, CSHELL and GMT paths.
 
+
 ### Step 1: data cleaning using clean_insar_data.m
 ```MATLAB
 % remove some near-field unwrapping errors manually first
@@ -26,6 +27,7 @@ mask_insar_phase(this_track, insar_file, mask_file, scale, 'los_max', 80, 'detre
 ```
 This step would output a subsampled grid file called "unwrap_clean_sample.grd", in 100 meters resolution as default.
 
+
 ### Step 2: detrend the phase and remove the phase ambiguity
 If we have enough far-field GPS data, we could use those GPS data to invert a coarse slip model to detrend the unwrapped phase. \
 In cases such as Pamir and Qinghai earthquake, since we do not have enough GPS sites covered, we could just assume a far-field pixel that corresponds to zero displacement.
@@ -43,6 +45,7 @@ remove_ref_from_grid(grdin,grdout,lonf,latf,ref_lon,threshold);
 - `ref_lon`: central meridian to compute UTM coordinates: This parameter is necessary because UTM coordinates are generally confined within a single UTM zone.
 If your study area crosses two different UTM zones, it would be complicated to convert to the UTM coordinates at the UTM zone boundary directly. 
 So we shift the central meridian to the west (ref_lon), so that you could define a broader UTM zone than the common one. Usualy choose a ref_lon <= lonc.
+
 
 ### (Optional) apply the sign mask for the detrended offset data
 Because offset data are noisy than phase ones, sometimes you even need to apply a sign mask across the fault.
@@ -67,6 +70,7 @@ make_insar_data(los_list, Nmin, Nmax, 'method', 'quadtree', 'fault', fault_file,
 **Note: If your minimum size of slip patch is 1km, your smallest resolution cell is 300m * 300m, that is, you should keep at least 3 points within one patch
 distance in order to catch the curve gradient**
 
+
 ### Step 4: build the fault geometry
 - `fault_file`: The fault ID is counted based on the order of fault segments written in `fault_file`, all fault segments have a default dip angle of 90 degrees.
 This file is same as the one in Step 3.
@@ -85,11 +89,38 @@ slip_model_ds = [];
 - `slip_model_vs`: contains several rectangular fault planes
 - `slip_model_ds`: set empty for most cases, because it's used to construct the geometry of "Y shape" or "flower structure" formed by shallow splay faults.
 
+
 ### Step 5: inversion using first downsampled data
 - `iter_step`: The steps during the iterative sampling and inversion (=0: initial step;  =1: iterative sampling/inversion)
 - `shallow_dip_id`: The fault IDs of shallow splay faults, set empty for most cases
 - `segment_smooth_file`: The continuity between each fault plane (format: fault_ID1, left/right, fault_ID2, right/left. 
 The starting point of the fault is presumed as "left")
-- `intersect_smooth_file`: The continuity between splay faults and major fault planes, set empty for most cases.
+- `intersect_smooth_file = []`: The continuity between splay faults and major fault planes, set empty for most cases.
 - `fault_file`: Same as above
 - `model_type = okada % (default)`: Okada or layered model
+```MATLAB
+iter_step = 0;
+segment_smooth_file = 'seg_connect';
+intersect_smooth_file = [];
+[slip_model,~,~] = make_fault_from_insar(slip_model_vs,slip_model_ds,iter_step,'shallow_dip_id',[], ...
+                  'segment_smooth_file',segment_file,'intersect_smooth_file',intersect_file,'fault',fault_file, ...
+                  'lonc',72,'latc',38.5,'ref_lon',71,'model_type','okada');
+```
+
+
+### Step 6: iterative sampling data using the model predictions (Wang and Fialko, GRL 2015)
+```MATLAB
+iter_step = 1;  % usually just one iteration is enough to rule out samples on noisy pixels
+resamp_insar_data(los_list, Nmin, Nmax, iter_step, 'fault', fault_file, 'dec',2, 'lonc',72, 'latc',38.5, 'ref_lon',71);
+```
+- `dec`: decimation of grid files, default value is 1.
+- All other parameters are the same as Step 3.
+
+
+### Step 7: inversion using resampled data
+```MATLAB
+[slip_model,rms,model_roughness] = make_fault_from_insar(slip_model_vs,slip_model_ds,iter_step, ...
+                     'segment_smooth_file',segment_file,'intersect_smooth_file',intersect_file,'fault',fault_file, ...
+                     'lonc',72,'latc',38.5,'ref_lon',71);
+```
+Tha parameters are the same as Step 5.
