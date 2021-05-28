@@ -32,8 +32,9 @@ In cases such as Pamir and Qinghai earthquake, since we do not have enough GPS s
 ```MATLAB
 % grdin = '/Users/zej011/coseismic/DES5/LOS3/unwrap_clean_sample.grd';
 % grdout = '/Users/zej011/coseismic/DES5/LOS3/los_clean_detrend.grd';
-% lonf = 73.215150;   latf = 37.754558;  ref_lon = 71;   
-% threshold = 0.5; (pixels within 500m would be averaged in order to get the value at the reference point)
+% lonf = 73.215150;   latf = 37.754558;  (lonf/latf is the coordinate of pixel point)
+% ref_lon = 71;  lonc = 72;  latc = 38.5;  (lonc/latc is the coordinate of reference point (0,0))
+% threshold = 0.5; (pixels within 500m would be averaged in order to get the value at that point)
 remove_ref_from_grid(grdin,grdout,lonf,latf,ref_lon,threshold);
 ```
 - `grdin`: InSAR grid input
@@ -41,7 +42,7 @@ remove_ref_from_grid(grdin,grdout,lonf,latf,ref_lon,threshold);
 - `lonf/latf`: reference lon/lat to convert lon/lat to UTM coordinates (m or km)
 - `ref_lon`: central meridian to compute UTM coordinates: This parameter is necessary because UTM coordinates are generally confined within a single UTM zone.
 If your study area crosses two different UTM zones, it would be complicated to convert to the UTM coordinates at the UTM zone boundary directly. 
-So we shift the central meridian to the west (ref_lon), so that you could define a broader UTM zone than the common one. Usualy choose a ref_lon <= lonf.
+So we shift the central meridian to the west (ref_lon), so that you could define a broader UTM zone than the common one. Usualy choose a ref_lon <= lonc.
 
 ### (Optional) apply the sign mask for the detrended offset data
 Because offset data are noisy than phase ones, sometimes you even need to apply a sign mask across the fault.
@@ -66,6 +67,29 @@ make_insar_data(los_list, Nmin, Nmax, 'method', 'quadtree', 'fault', fault_file,
 **Note: If your minimum size of slip patch is 1km, your smallest resolution cell is 300m * 300m, that is, you should keep at least 3 points within one patch
 distance in order to catch the curve gradient**
 
-### Step 4: inversion using first downsampled data
+### Step 4: build the fault geometry
 - `fault_file`: The fault ID is counted based on the order of fault segments written in `fault_file`, all fault segments have a default dip angle of 90 degrees.
-- `dip_change_id`: 
+This file is same as the one in Step 3.
+- `dip_change_id = 1:5`: The array of fault IDs that have dip angles **NOT** equal to 90 degrees.
+- `dip_angle = [87.7, 81.8, 85, 89.3, 89.3]`: The array of dip angles that are consistent with the array of `dip_change_id`.
+- `len_top = 1.2e3`: The top length of each fault patch
+- `l_ratio = 1.3 % (default)`: len(this_layer) / len(top_layer), follow a geometric progression
+- `w_ratio = 1.3 % (default)`: width(this_layer) / width(top_layer), follow a geometric progression
+- `width = 25e3 (default)`: The width of the whole fault plane
+- `depth_start = 0 (default)`: The top depth of the fault plane. Default fault ruptures to surface.
+```MATLAB
+slip_model_vs = load_fault_one_plane(fault_file,'dip_change_id',dip_change_id,'dip',dip_angle, ...
+                                     'lonc',72,'latc',38.5,'ref_lon',71,'len_top',1.2e3);
+slip_model_ds = [];
+```
+- `slip_model_vs`: contains several rectangular fault planes
+- `slip_model_ds`: set empty for most cases, because it's used to construct the geometry of "Y shape" or "flower structure" formed by shallow splay faults.
+
+### Step 5: inversion using first downsampled data
+- `iter_step`: The steps during the iterative sampling and inversion (=0: initial step;  =1: iterative sampling/inversion)
+- `shallow_dip_id`: The fault IDs of shallow splay faults, set empty for most cases
+- `segment_smooth_file`: The continuity between each fault plane (format: fault_ID1, left/right, fault_ID2, right/left. 
+The starting point of the fault is presumed as "left")
+- `intersect_smooth_file`: The continuity between splay faults and major fault planes, set empty for most cases.
+- `fault_file`: Same as above
+- `model_type = okada % (default)`: Okada or layered model
