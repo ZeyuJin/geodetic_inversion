@@ -2,11 +2,11 @@
 This repo homogeneous/layered inversion using InSAR/GPS
 
 ---
-## Step 1 ~ 2 are written in the file main_detrend_inversion.m
+## Step 1 ~ 2 are written in the file `main_detrend_inversion.m`
 ### Step 0: setup your MATLAB, CSHELL and GMT paths.
 
 
-### Step 1: data cleaning using clean_insar_data.m
+### Step 1: data cleaning using `clean_insar_data.m`
 ```MATLAB
 % remove some near-field unwrapping errors manually first
 clean_insar_data; 
@@ -57,7 +57,7 @@ sign_mask_offset(this_track, 'los_clean_unmasked.grd');
 ```
 
 ---
-## Step 3 ~ 4 are written in the file main_detrend_inversion.m
+## Step 3 ~ 7 are written in the file `main_detrend_inversion.m`
 ### Step 3: apply quad-tree sampling to all detrended data (LOS/RNG/AZO)
 - `fault_file`: file that writes linearized fault segments (Format: lon1  lat1  lon2  lat2, each pair correponds to one fault end)
 - `area = [71.8 73.9 37.7 39.1]`: rectangular area that crops the InSAR grid file
@@ -124,3 +124,34 @@ resamp_insar_data(los_list, Nmin, Nmax, iter_step, 'fault', fault_file, 'dec',2,
                      'lonc',72,'latc',38.5,'ref_lon',71);
 ```
 Tha parameters are the same as Step 5.
+
+---
+**Note: The model geometry of each patch is defined as follows:**
+
+                   N
+                  /
+                 /| strike
+         Ref:-> @------------------------E
+                |\        p .            \ W
+                :-\      i .              \ i
+                |  \    l .                \ d
+                :90 \  S .                  \ t
+                |-dip\  .                    \ h
+                :     \. | rake               \ 
+               -Z      -------------------------
+                              L e n g t h
+
+`slip_model` is a matrix that defines the model parameters:
+1. Fault segment index
+2. Fault patch index
+3. Number of patches in this layer
+4. X(Ref) of each rectangular patch (East is positive)
+5. Y(Ref) of each rectangular patch (North is positive)
+6. Z(Ref) of each rectangular patch (Up is positive)
+7. Along-strike length of each patch
+8. Down-dip length of each patch
+9. Strike angle of each patch
+10. Dip angle of each patch
+11. Topography on the top surface of each patch
+12. Strike-slip of each patch
+13. Dip-slip of each patch
