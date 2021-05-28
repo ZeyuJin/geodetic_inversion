@@ -10,10 +10,10 @@ This repo homogeneous/layered inversion using InSAR/GPS
 % remove some near-field unwrapping errors manually first
 clean_insar_data; 
 ```
-If you open clean_insar_data.m, you need to specify following information to clean the data:
-- this_track: the directory that InSAR grid file is saved.
-- insar_file = 'unwrap_ll.grd': the interferogram/offsets grid
-- mask_file = 'mask_txt': the masking TXT file that writes the masking polygon files (e.g. mask1.txt, mask2.txt, ...). 
+If you open `clean_insar_data.m`, you need to specify following information to clean the data:
+- `this_track`: the directory that InSAR grid file is saved.
+- `insar_file = 'unwrap_ll.grd'`: the interferogram/offsets grid
+- `mask_file = 'mask_txt'`: the masking TXT file that writes the masking polygon files (e.g. mask1.txt, mask2.txt, ...). 
 The masking polygons could be generated using Google Earth KML files.
 
 Then the subroutine runs as (inside clean_insar_data.m):
@@ -36,10 +36,10 @@ In cases such as Pamir and Qinghai earthquake, since we do not have enough GPS s
 % threshold = 0.5; (pixels within 500m would be averaged in order to get the value at the reference point)
 remove_ref_from_grid(grdin,grdout,lonf,latf,ref_lon,threshold);
 ```
-- grdin: InSAR grid input
-- grdout: InSAR grid output
-- lonf/latf: reference lon/lat to convert lon/lat to UTM coordinates (m or km)
-- ref_lon: central meridian to compute UTM coordinates: This parameter is necessary because UTM coordinates are generally confined within a single UTM zone.
+- `grdin`: InSAR grid input
+- `grdout`: InSAR grid output
+- `lonf/latf`: reference lon/lat to convert lon/lat to UTM coordinates (m or km)
+- `ref_lon`: central meridian to compute UTM coordinates: This parameter is necessary because UTM coordinates are generally confined within a single UTM zone.
 If your study area crosses two different UTM zones, it would be complicated to convert to the UTM coordinates at the UTM zone boundary directly. 
 So we shift the central meridian to the west (ref_lon), so that you could define a broader UTM zone than the common one. Usualy choose a ref_lon <= lonf.
 
