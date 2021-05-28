@@ -4,6 +4,7 @@ This repo homogeneous/layered inversion using InSAR/GPS
 ---
 ## Step 1 ~ 2 are written in the file `main_detrend_inversion.m`
 ### Step 0: setup your MATLAB, CSHELL and GMT paths.
+Please include the MATLABPATH for all directories.
 
 
 ### Step 1: data cleaning using `clean_insar_data.m`
@@ -32,8 +33,8 @@ This step would output a subsampled grid file called "unwrap_clean_sample.grd", 
 If we have enough far-field GPS data, we could use those GPS data to invert a coarse slip model to detrend the unwrapped phase. \
 In cases such as Pamir and Qinghai earthquake, since we do not have enough GPS sites covered, we could just assume a far-field pixel that corresponds to zero displacement.
 ```MATLAB
-% grdin = '/Users/zej011/coseismic/DES5/LOS3/unwrap_clean_sample.grd';
-% grdout = '/Users/zej011/coseismic/DES5/LOS3/los_clean_detrend.grd';
+% grdin = '/Users/zej011/coseismic/DES5/LOS2/unwrap_clean_sample.grd';
+% grdout = '/Users/zej011/coseismic/DES5/LOS2/los_clean_detrend.grd';
 % lonf = 73.215150;   latf = 37.754558;  (lonf/latf is the coordinate of pixel point)
 % ref_lon = 71;  lonc = 72;  latc = 38.5;  (lonc/latc is the coordinate of reference point (0,0))
 % threshold = 0.5; (pixels within 500m would be averaged in order to get the value at that point)
