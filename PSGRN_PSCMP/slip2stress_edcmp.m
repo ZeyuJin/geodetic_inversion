@@ -19,13 +19,14 @@ function slip2stress_edcmp(slip_model,save_dir,green_dir,depth)
    % format same as DIS3D
    cmdstr = ['mkdir -p ',save_dir,'/outdata'];  % mkdir for the edcmp output
    system(cmdstr);      
-   count = '';
+   count = '_M5';
    out_type = 'strs';
    obs_type = 2;    % grid observation
 %    obs_type = 1;    % line observation
 %    obs_arr = [-35 49.5 24.5 -10]*1e3;     % start from the upper left point 
 %    obs_arr = [40 30 120 -50]*1e3;
-   obs_arr = [40 130 180 -50]*1e3;
+%    obs_arr = [40 150 190 -50]*1e3;
+   obs_arr = [0 40 100 -60]*1e3;  % for 2016 M5.4 event
    inv = 1000;       % interval is 500m
    xrec = abs(obs_arr(3) - obs_arr(1))/inv + 1;
    yrec = abs(obs_arr(4) - obs_arr(2))/inv + 1;
@@ -50,8 +51,8 @@ function slip2stress_edcmp(slip_model,save_dir,green_dir,depth)
    S = layered_wang(xs,ys,zs,strike,dip,rake,U,lp,wp,NR,save_dir,green_dir,count, ...
                    'out_file',out_type,'obs_type',obs_type,'obs_arr',obs_arr);
    
-   fid = fopen([save_dir,'/stress_tensor.out'],'wt');
-   strs_depth = [YY/1e3,XX/1e3,ZZ/1e3,S/1e6];
-   fprintf(fid,'%.4e  %.4e  %.4e  %.4e  %.4e  %.4e  %.4e  %.4e  %.4e\n',strs_depth');
-   fclose(fid);   
+%    fid = fopen([save_dir,'/stress_tensor.out'],'wt');
+%    strs_depth = [YY/1e3,XX/1e3,ZZ/1e3,S/1e6];
+%    fprintf(fid,'%.4e  %.4e  %.4e  %.4e  %.4e  %.4e  %.4e  %.4e  %.4e\n',strs_depth');
+%    fclose(fid);   
 end

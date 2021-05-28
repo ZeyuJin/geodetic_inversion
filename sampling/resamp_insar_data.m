@@ -104,11 +104,11 @@ function resamp_insar_data(data_list,Nmin,Nmax,iter_step,varargin)
        yin = yutm - yo;
        xin = reshape(xin,size(xm1));
        yin = reshape(yin,size(ym1));       
-       slip_model_in = load('fault_M7.slip');
+%        slip_model_in = load('fault_M7.slip');
 %        slip_model_in = load('fault_M6.slip');
 %        tmp = load('resample/4_segments/homo_4data.mat');
-%        tmp = load('resample/misfit_include_MAI/homo_better_data.mat');
-%        slip_model_in = tmp.slip_model;
+       tmp = load('resample/misfit_include_MAI/homo_better_data.mat');
+       slip_model_in = tmp.slip_model;
        
        if strcmp(data_type,'insar')
           los_model = slip2insar_okada(xin,yin,losl,zel,znl,zul,slip_model_in);   % fix the bug using multi-looked looking angles

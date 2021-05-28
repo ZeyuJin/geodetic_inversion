@@ -78,8 +78,8 @@ function slip_model = load_fault_one_plane(fault_segment_file,varargin)
         error('The NO.ID of dipping segment is out of range!');
     else
         tmp = dip;
-        dip = this_dip .* ones(1,nflt);
-        dip(dip_change_id) = tmp;
+        dip = tmp .* ones(1,nflt);
+%         dip(dip_change_id) = tmp;
     end
     
     %% the fault geometry is defined as Peter Shearer's textbook   

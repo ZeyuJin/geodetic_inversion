@@ -4,7 +4,7 @@ format long
 %set(0,'defaultAxesFontSize', 15)
 d2r=pi/180;
 
-cmax = 10;
+cmax = 100;
 axis_range = [0 25 -15 0];
 if ~isempty(varargin)
    for CC = 1:floor(length(varargin)/2)
@@ -40,8 +40,8 @@ wp=data(:,8);
 p_strk=data(:,9);
 p_dip=data(:,10)*d2r;
 % tp=data(:,11);
-slip1=data(:,12);
-slip2=data(:,13);
+slip1=data(:,12)*10;  % cm to mm
+slip2=data(:,13)*10;
 
 % min_s1=min(slip1);
 % max_s1=max(slip1);
@@ -160,7 +160,8 @@ axis equal
 % ylim([-15 0]);
 axis(axis_range);
 colormap jet
-colorbar
+hc = colorbar;
+title(hc,'mm');
 caxis([0 cmax]);
 grid on
 set(gca,'Fontsize',25);

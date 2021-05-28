@@ -1,4 +1,4 @@
-function build_fault_M5(lon_eq,lat_eq,depth,strike,dip,Mw,varargin)
+function F = build_fault_M5(lon_eq,lat_eq,depth,strike,dip,Mw,varargin)
 % build only one segment based on the focal mechanism of USGS
 % lon_eq,lat_eq,depth is the origin of the fault (not to be the same as the hypocenter)
 % strike,dip,Mw are from the first-motion solution (from USGS)
@@ -12,9 +12,14 @@ function build_fault_M5(lon_eq,lat_eq,depth,strike,dip,Mw,varargin)
     % dip = 68;
     
     % default values
-    lonf = -117.5;   % reference point
-    latf = 35.5;
-    [xc,yc] = utm2ll(lon_eq,lat_eq,0,1);
+%     lonf = -117.5;   % reference point
+%     latf = 35.5;
+%     [xc,yc] = utm2ll(lon_eq,lat_eq,0,1);
+    lonf = 72;
+    latf = 38.5;
+    ref_lon = 71;
+    [xc,yc] = ll2xy(lon_eq,lat_eq,ref_lon);
+
     len = 7e3;
     W = 7e3;
     Npatch = 15;
@@ -70,7 +75,8 @@ function build_fault_M5(lon_eq,lat_eq,depth,strike,dip,Mw,varargin)
         end
     end
     
-    [xo,yo] = utm2ll(lonf,latf,0,1);    % reference point
+%     [xo,yo] = utm2ll(lonf,latf,0,1);    % reference point
+    [xo,yo] = ll2xy(lonf,latf,ref_lon);
     fxc = xc - xo;
     fyc = yc - yo;
 
@@ -140,16 +146,18 @@ function build_fault_M5(lon_eq,lat_eq,depth,strike,dip,Mw,varargin)
     
     slip_dist = F*G;
     fault_M5(:,2) = [1:size(fault_M5,1)]';
-    fault_M5(:,12) = 100 * reshape(slip_dist',1,[]);  % assume strike-slip only
+%     fault_M5(:,12) = 100 * reshape(slip_dist',1,[]);  % assume strike-slip only
+    fault_M5(:,13) = 100 * reshape(slip_dist',1,[]);  % assume dip-slip only
     slip_model = fault_M5;
     
     % test for plotting the segment
-    show_slip_model(fault_M5,'misfit_range',cmax,'axis_range',axis_range,'seismic',seis_matfile,'fault_file',fault_file);    
+%     show_slip_model(fault_M5,'misfit_range',cmax,'axis_range',axis_range,'seismic',seis_matfile,'fault_file',fault_file); 
+    show_slip_model(fault_M5,'misfit_range',cmax,'axis_range',axis_range);
     
-    read_plot_fault_segment('../verified_rupture_trace.txt');
-    read_plot_fault_segment('../not_verified_rupture_trace.txt');
+%     read_plot_fault_segment('../verified_rupture_trace.txt');
+%     read_plot_fault_segment('../not_verified_rupture_trace.txt');
     
-    title('M5 event');
+    title('M6.4 event');
     save([model_name,'.mat'],'slip_model');
 
 end

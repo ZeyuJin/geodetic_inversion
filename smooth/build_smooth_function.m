@@ -8,9 +8,9 @@ function [H,h1,indx_less_smooth_patch] = build_smooth_function(slip_model_vs,sli
    slip_model = [slip_model_vs;slip_model_ds];
    slip_model(:,2)=[1:size(slip_model,1)]';   % recomputed finally to combine all the fault segments
    
-   [H_plane,~] = smoo1_each_plane(slip_model,'fdip',15);
+   [H_plane,~] = smoo1_each_plane(slip_model,'fdip',5);
    if ~isempty(segment_file)
-       H_segment = smoo1_segments(slip_model,segment_file,'fdip',15);
+       H_segment = smoo1_segments(slip_model,segment_file,'fdip',5);
    else
        H_segment = [];
    end
@@ -60,7 +60,7 @@ function [H,h1,indx_less_smooth_patch] = build_smooth_function(slip_model_vs,sli
 %           tmp = tmp_patch(indx_shallow_two);
           indx_dip_patch = [indx_dip_patch;tmp_patch];
       end
-%       indx_less_smooth_patch = indx_dip_patch;
+      indx_less_smooth_patch = indx_dip_patch;
 
 % %       disp(indx_dip_patch);
 % %       indx_vertical_patch = [1:3,21:23,36:38,76:80,87:88]';
@@ -72,8 +72,8 @@ function [H,h1,indx_less_smooth_patch] = build_smooth_function(slip_model_vs,sli
 %       
 % %       tmp = [1:Np/2];
 % %       indx_more_smooth_patch = [tmp,tmp+Np]';     
-      indx_more_smooth_patch = [];
-      
+%       indx_more_smooth_patch = [];
+     
       for ii = 1:h1
           indx_nonzero = find(H(ii,:));
           if length(indx_nonzero) ~= 2
@@ -84,15 +84,16 @@ function [H,h1,indx_less_smooth_patch] = build_smooth_function(slip_model_vs,sli
           left_nonzero = indx_nonzero(1) - Np;        % find only dip components
           right_nonzero = indx_nonzero(2) - Np;  
           if ismember(left_nonzero,indx_less_smooth_patch) && ismember(right_nonzero,indx_less_smooth_patch)
-              ratio = max(abs(H(ii,indx_nonzero)));
+%               ratio = max(abs(H(ii,indx_nonzero)));
+              ratio = 2;
               H(ii,indx_nonzero) = H(ii,indx_nonzero) ./ ratio;
           end
           
-          % reduce the partition effect on segment 1
-          if ismember(indx_nonzero(1),indx_more_smooth_patch) || ismember(indx_nonzero(2),indx_more_smooth_patch)
-              H(ii,indx_nonzero) = H(ii,indx_nonzero) .* 1.5;
-%               H(ii,indx_nonzero) = H(ii,indx_nonzero) .* 1.2;
-          end       
+%           % reduce the partition effect on segment 1
+%           if ismember(indx_nonzero(1),indx_more_smooth_patch) || ismember(indx_nonzero(2),indx_more_smooth_patch)
+%               H(ii,indx_nonzero) = H(ii,indx_nonzero) .* 1.5;
+% %               H(ii,indx_nonzero) = H(ii,indx_nonzero) .* 1.2;
+%           end       
       end
    end  
       

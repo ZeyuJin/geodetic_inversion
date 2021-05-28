@@ -129,7 +129,7 @@ fprintf(fedc,['#================================================================
 '#===============================================================================\n']);
 fprintf(fedc,' 0 \n');
 fprintf(fedc,' 0 \n');
-system(['mkdir -p ',out_dir]);
+% system(['mkdir -p ',out_dir]);
 fprintf(fedc,['''',out_dir,'/''\n']);
 fprintf(fedc,' 0             0             0 \n');
 fprintf(fedc,' ''ux.dat''    ''uy.dat''    ''uz.dat'' \n');

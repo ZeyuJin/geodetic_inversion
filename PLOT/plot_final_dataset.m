@@ -100,6 +100,7 @@ function plot_final_dataset(this_track,varargin)
     los_resid_full(los_resid_full > threshold) = NaN;
     los_resid_full(los_resid_full < -threshold) = NaN;
     
+%     % for ALOS-2 stripmap MAI
 %     edge_mask = load([this_track,'/edge_mask.txt']);
 %     lon_in = edge_mask(:,1);
 %     lat_in = edge_mask(:,2);
@@ -113,7 +114,7 @@ function plot_final_dataset(this_track,varargin)
     sz = 25;
     figure;
     subplot('Position',[0.027 0.5 0.323 0.4]); hold on
-    h1 = scatter(XS,YS,sz,los_samp,'filled');
+    h1 = scatter(XS,YS,sz,los_samp/100,'filled');
     shading flat
     colormap jet
 %     colorbar('southoutside');
@@ -126,7 +127,7 @@ function plot_final_dataset(this_track,varargin)
 %     set(h1, 'YLimInclude', 'off');
 %     set(h1, 'XLimInclude', 'off');
     axis equal
-    caxis([-max_value max_value]);
+    caxis([-max_value max_value+1e-3]/100);
     if ~isempty(fault_file)
        for ii = 1:LS
            slon = [lonf(ii) lonf(ii+LS)];
@@ -150,7 +151,7 @@ function plot_final_dataset(this_track,varargin)
 %     text(txt_left,53.5,title_name,'fontsize',20,'FontWeight','bold'); 
     
     subplot('Position',[0.35 0.5 0.323 0.4]); hold on
-    h2 = scatter(XS,YS,sz,los_model,'filled');
+    h2 = scatter(XS,YS,sz,los_model/100,'filled');
     shading flat
     colormap jet
     cb1 = colorbar('southoutside');
@@ -165,7 +166,7 @@ function plot_final_dataset(this_track,varargin)
     text(45,27,['(',label(2),')'],'fontsize',20,'FontWeight','bold');
 %     text(-37.8,57,['(',label(2),')'],'fontsize',20,'FontWeight','bold');
     axis equal
-    caxis([-max_value max_value]);
+    caxis([-max_value max_value+1e-3]/100);
     if ~isempty(fault_file)
        for ii = 1:LS
           slon = [lonf(ii) lonf(ii+LS)];
@@ -183,7 +184,7 @@ function plot_final_dataset(this_track,varargin)
     set(gca,'box','on');
     
     subplot('Position',[0.673 0.5 0.323 0.4]); hold on
-    h3 = pcolor(XF,YF,los_resid_full);
+    h3 = pcolor(XF,YF,los_resid_full/100);
     shading flat
     colormap jet
     cb2 = colorbar('southoutside');
@@ -192,7 +193,7 @@ function plot_final_dataset(this_track,varargin)
     set(gca,'Fontsize',20);
     text(45,27,['(',label(3),')'],'fontsize',20,'FontWeight','bold');
 %     text(-37.8,57,['(',label(3),')'],'fontsize',20,'FontWeight','bold');
-    caxis([-res_max res_max]);  
+    caxis([-res_max res_max+1e-3]/100);  
     axis equal
     if ~isempty(fault_file)
        for ii = 1:LS

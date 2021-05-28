@@ -7,7 +7,7 @@ function [slip_model,RMS_misfit,model_roughness] = make_fault_from_insar(slip_mo
     lambda = 1e-1;
     alpha = 0.25;  % relative weight of RNG data
     beta = 1;   % relative weight of ALOS-2 data
-    gamma = 0.8;  % relative weight of AZO data (from CSK)
+    gamma = 0.2;  % relative weight of AZO data (from CSK)
     segment_file = [];    intersect_file = [];
     shallow_dip_id = [];
     model_type = 'okada';
@@ -57,116 +57,50 @@ function [slip_model,RMS_misfit,model_roughness] = make_fault_from_insar(slip_mo
     slip_model = [slip_model_vs;slip_model_ds];   
     slip_model(:,2)=[1:size(slip_model,1)]';    % recomputed finally to combine all the fault segments
     disp(['There are total ',num2str(max(slip_model(:,1))),' segments']);
-%     [G1_raw,G1,bd1_raw,bd1] = build_green_function(slip_model,['ERS170/los_samp',num2str(iint),'.mat'],'insar','noramp',model_type);
-%     [G2_raw,G2,bd2_raw,bd2] = build_green_function(slip_model,['ERS442/los_samp',num2str(iint),'.mat'],'insar','noramp',model_type);
-%     [G3_raw,G3,bd3_raw,bd3] = build_green_function(slip_model,['ERS120/los_samp',num2str(iint),'.mat'],'insar','noramp',model_type);
 
-    [G1_raw,G1,bd1_raw,bd1] = build_green_function(slip_model,['ASC100/LOS/los_samp',num2str(iint),'.mat'],'insar','noramp',model_type);
-    [G2_raw,G2,bd2_raw,bd2] = build_green_function(slip_model,['DES5/LOS/los_samp',num2str(iint),'.mat'],'insar','noramp',model_type);
-%     [G3_raw,G3,bd3_raw,bd3] = build_green_function(slip_model,['ALOS2/los_samp',num2str(iint),'.mat'],'insar','noramp',model_type);
+    [G1_raw,G1,bd1_raw,bd1] = build_green_function(slip_model,['ASC100/LOS2/los_samp',num2str(iint),'.mat'],'insar','noramp',model_type);
+    [G2_raw,G2,bd2_raw,bd2] = build_green_function(slip_model,['DES5/LOS2/los_samp',num2str(iint),'.mat'],'insar','noramp',model_type);
+%     [G3_raw,G3,bd3_raw,bd3] = build_green_function(slip_model,['ALOS2_SCAN2/los_samp',num2str(iint),'.mat'],'insar','noramp',model_type);
+%     G2_raw = []; G2 = []; bd2_raw = []; bd2 = [];
     G3_raw = []; G3 = []; bd3_raw = []; bd3 = [];
     G4_raw = []; G4 = []; bd4_raw = []; bd4 = [];
     G5_raw = []; G5 = []; bd5_raw = []; bd5 = [];
+    Gs_raw = []; Gs = []; bs_raw = []; bs = [];
 %     [G4_raw,G4,bd4_raw,bd4] = build_green_function(slip_model,['ALOS2_stripe/LOS/los_samp',num2str(iint),'.mat'],'insar','noramp',model_type);
 %     [G5_raw,G5,bd5_raw,bd5] = build_green_function(slip_model,['ALOS2_stripe/MAI2/los_samp',num2str(iint),'.mat'],'AZO','noramp',model_type);
-    
-%     [G1_raw,G1,bd1_raw,bd1] = build_green_function(slip_model,['ASC64/branch_cut/three_subswath/los_samp',num2str(iint),'.mat'],'insar','noramp',model_type);
-%     [G2_raw,G2,bd2_raw,bd2] = build_green_function(slip_model,['DES71/branch_cut/three_subswath/los_samp',num2str(iint),'.mat'],'insar','noramp',model_type);
-%     [G3_raw,G3,bd3_raw,bd3] = build_green_function(slip_model,['ALOS-2/T065/three_subswath/los_samp',num2str(iint),'.mat'],'insar','noramp',model_type);
-%     [G4_raw,G4,bd4_raw,bd4] = build_green_function(slip_model,['ALOS-2/T066/three_subswath/los_samp',num2str(iint),'.mat'],'insar','noramp',model_type);
-%     [G5_raw,G5,bd5_raw,bd5] = build_green_function(slip_model,['ASC64/offsets/los_samp',num2str(iint),'.mat'],'insar','noramp',model_type);
-%     [G6_raw,G6,bd6_raw,bd6] = build_green_function(slip_model,['DES71/offsets/los_samp',num2str(iint),'.mat'],'insar','noramp',model_type);
-%     [G7_raw,G7,bd7_raw,bd7] = build_green_function(slip_model,['Cosmo_Skymed/ASC_offsets/los_samp',num2str(iint),'.mat'],'AZO','noramp',model_type);
-%     [G8_raw,G8,bd8_raw,bd8] = build_green_function(slip_model,['Cosmo_Skymed/DES_offsets/los_samp',num2str(iint),'.mat'],'AZO','noramp',model_type);
-% %     [Gp_raw,Gp,bp_raw,bp] = build_green_function(slip_model,'GPS/continue_GPS/continuous_gps_3d.mat','cgps','noramp',model_type,0.3);     % default weight of cGPS is 0.3
-% %     [Gg_raw,Gg,bg_raw,bg] = build_green_function(slip_model,'GPS/continue_GPS/Peng_far_GPS/Peng_far_gps_3d.mat','cgps','noramp',model_type,0.3);
-% %     [Gp_raw,Gp,bp_raw,bp] = build_green_function(slip_model,'GPS/Floyd_GPS/gps_syn.mat','camp_gps','noramp',model_type,0.3);
-% %     [Gs_raw,Gs,bs_raw,bs] = build_green_function(slip_model,'GPS/survey_GPS/gps_syn.mat','camp_gps','noramp',model_type,0.25);
 %     [Gp_raw,Gp,bp_raw,bp] = build_green_function(slip_model,'GPS/Floyd_GPS/Floyd_GPS_all.mat','camp_gps','noramp',model_type,0.3);
-%     [Gs_raw,Gs,bs_raw,bs] = build_green_function(slip_model,'GPS/survey_GPS/survey_gps_2d.mat','camp_gps','noramp',model_type,0.25);
+%     [Gs_raw,Gs,bs_raw,bs] = build_green_function(slip_model,'GPS/survey_gps_2d.mat','camp_gps','noramp',model_type, 10);
 
 
     %% generate Green's function and smooth matrix
     [H,h1,~] = build_smooth_function(slip_model_vs,slip_model_ds,segment_file,intersect_file,'noramp','dip_id',shallow_dip_id); 
-    
-% %     segment_ID = 1:2;  top_layer_no = 1; ratio = 2e-4;
-%     segment_ID = 3;  top_layer_no = 1; ratio = 2e-4;
-%     [Ws,ds] = zero_slip_boundary(slip_model,segment_ID,top_layer_no,ratio);    % for the top layer
-%     
-%     plane_fault = 1:5; 
-    plane_fault = 1:4;
-%     plane_fault = 1:2;
+      
+
+    %% add zero-slip boundary for the fault bottom/left/right
+    plane_fault = 1:5; 
     bottom_layer_no = max(slip_model(:,3)); ratio = 5e-4;
     [Wb,db] = zero_slip_boundary(slip_model,plane_fault,bottom_layer_no,ratio);    % for the bottom layer
-%       Wb = []; db = [];
-% %     plane_fault = 2; ratio = 6e-4;
-% %     [Wb2,db2] = zero_slip_boundary(slip_model,plane_fault,bottom_layer_no,ratio);    % for the bottom layer 
-% %     Wb = [Wb1;Wb2];
-% %     db = [db1;db2];
-%     plane_fault = 1:8;  bottom_layer_no = max(slip_model(:,3)); ratio = 1e-4;
-%     [Wb,db] = zero_slip_boundary(slip_model,plane_fault,bottom_layer_no,ratio);    % for the bottom layer
-%     
-% %     left_fault = 1;  ratio = 3e-4;
-% %     [Wl1,dl1] = zero_slip_boundary(slip_model,left_fault,'left',ratio);   
-% %     left_fault = 2;  ratio = 6e-4;
-% %     [Wl2,dl2] = zero_slip_boundary(slip_model,left_fault,'left',ratio);
-% %     Wl = [Wl1;Wl2];
-% %     dl = [dl1;dl2]; 
-%     left_fault = 4:5;  
-    left_fault = 3:4;
-%     left_fault = 2;
+    
+    left_fault = 4:5;  
     ratio = 3e-4;
     [Wl,dl] = zero_slip_boundary(slip_model,left_fault,'left',ratio);
-%       Wl = []; dl = [];
-%     
-% %     right_fault = 1;   ratio = 5e-4;
-% %     [Wr1,dr1] = zero_slip_boundary(slip_model,right_fault,'right',ratio);
-% %     right_fault = 2;   ratio = 6e-4;
-% %     [Wr2,dr2] = zero_slip_boundary(slip_model,right_fault,'right',ratio);   
-% %     Wr = [Wr1;Wr2];
-% %     dr = [dr1;dr2];
+
     right_fault = 1;   ratio = 3e-4;
     [Wr,dr] = zero_slip_boundary(slip_model,right_fault,'right',ratio);
-%       Wr = [];  dr = [];
-%     
-% %     % constrained by moment (M5.8)
-% %     fault_id = slip_model(:,1);
-% %     indx_M54 = fault_id == 1;
-% %     indx_M58 = fault_id == 2;
-% %     Mw2 = 5.8;
-% %     [area,M0] = constrain_by_moment(slip_model,model_type,Mw2,indx_M58);
-% %     RR = 1.8e-4;
-% % %     area = [];
-% % %     M0 = [];
 
+    %% construct the Green's function
     % adjust the relative weight between ASC and DES track to be 1:1
     % better for fitting one track and decomposition
 %     A2D = 1/3;    % three ascending tracks (ASC64,T065,T066) & one descending track (DES71)
 %     A2D = 1;       % equal weight of each dataset
-%     G_raw = [A2D*G1;G2;A2D*beta*G3;A2D*beta*G4;alpha*G5;alpha*G6;gamma*G7;gamma*G8;Gp;Gs];  
-%     G_rough = [H*lambda/h1;Ws;Wb;Wl;Wr];
-% %     G_rough = [Ws;Wb;Wl;Wr];
-    G_raw = [G1;beta*G2;gamma*G3;G4;G5]; 
+    G_raw = [G1;beta*G2;G3;G4;gamma*G5;Gs]; 
     Greens = [G_raw;H*lambda/h1;Wb;Wl;Wr];
-    
-%     bd_raw = [A2D*bd1;bd2;A2D*beta*bd3;A2D*beta*bd4;alpha*bd5;alpha*bd6;gamma*bd7;gamma*bd8;bp;bs];
-%     bdata_sm = [bd_raw;zeros(h1,1);ds;db;dl;dr];
-% %     bdata_sm = [bd_raw;ds;db;dl;dr];
-    bd_raw = [bd1;beta*bd2;gamma*bd3;bd4;bd5];
+
+    bd_raw = [bd1;beta*bd2;bd3;bd4;gamma*bd5;bs];
     bdata_sm = [bd_raw;zeros(h1,1);db;dl;dr];
     
-%     % for 1995 M5+ events
-%     G_raw = [G1;G2;G3];
-%     Greens = [G_raw;H*lambda/h1;Ws;Wb;Wl;Wr;RR*area];
-%     bd_raw = [bd1;bd2;bd3];
-%     bdata_sm = [bd_raw;zeros(h1,1);ds;db;dl;dr;RR*M0];
-    
-%     GrF = [G1_raw;G2_raw;G3_raw;G4_raw;G5_raw;G6_raw;G7_raw;G8_raw;Gp_raw;Gs_raw];   % without any weight
-%     Bdata = [bd1_raw;bd2_raw;bd3_raw;bd4_raw;bd5_raw;bd6_raw;bd7_raw;bd8_raw;bp_raw;bs_raw];
-% %     GrF = [G1_raw;G2_raw;G3_raw];
-% %     Bdata = [bd1_raw;bd2_raw;bd3_raw];
-    GrF = [G1_raw;G2_raw;G3_raw;G4_raw;G5_raw];
-    Bdata = [bd1_raw;bd2_raw;bd3_raw;bd4_raw;bd5_raw];
+    GrF = [G1_raw;G2_raw;G3_raw;G4_raw;G5_raw;Gs_raw];
+    Bdata = [bd1_raw;bd2_raw;bd3_raw;bd4_raw;bd5_raw;bs_raw];
 
     %% the postivity constraint (adapted from Yuri's code)
     nflt = max(slip_model(:,1));
@@ -205,11 +139,11 @@ function [slip_model,RMS_misfit,model_roughness] = make_fault_from_insar(slip_mo
     slip_model(:,12) = u(1:sum(tSm));
     slip_model(:,13) = u(sum(tSm)+1:end);
 %     show_slip_model(slip_model,'seismicity_profile/Ross_seismicity_cut.mat');
-%     show_slip_model(slip_model,'misfit_range',400,'ref_lon',ref_lon,'lonc',lon_eq,'latc',lat_eq,'axis_range',[60 110 -45 25 -25 0]);
-    show_slip_model(slip_model,'misfit_range',25,'ref_lon',ref_lon,'lonc',lon_eq,'latc',lat_eq,'axis_range',[80 120 -10 40 -30 0]);
+    show_slip_model(slip_model,'misfit_range',400,'ref_lon',ref_lon,'lonc',lon_eq,'latc',lat_eq,'axis_range',[60 110 -45 25 -25 0]);
+%     show_slip_model(slip_model,'misfit_range',25,'ref_lon',ref_lon,'lonc',lon_eq,'latc',lat_eq,'axis_range',[80 120 -10 40 -30 0]);
 %     show_slip_model(slip_model,'misfit_range',25,'ref_lon',ref_lon,'lonc',lon_eq,'latc',lat_eq,'axis_range',[80 120 -10 40 -12 0]);
 %     show_slip_model(slip_model,'axis_range',[-25 0 15 45 -15 0],'misfit_range',10);
-    write_slip_model_okada(slip_model,'fault_M7.slip');
+%     write_slip_model_okada(slip_model,'fault_M7.slip');
 %     write_slip_model_okada(slip_model,'fault_M5.slip');
 
     %% plot the resampled data fitting
@@ -231,26 +165,25 @@ function [slip_model,RMS_misfit,model_roughness] = make_fault_from_insar(slip_mo
 %     survey_gps_model = Gs_raw * u;  
     
     
-    plot_insar_model_resampled(['ASC100/LOS/los_samp',num2str(iint),'.mat'],insar_model1,'iter_step',iint,'fault',fault_file,'model_type',model_type,'misfit_range',8,'defo_max',8,'ref_lon',ref_lon,'lonc',lon_eq,'latc',lat_eq);
-    plot_insar_model_resampled(['DES5/LOS/los_samp',num2str(iint),'.mat'],insar_model2,'iter_step',iint,'fault',fault_file,'model_type',model_type,'misfit_range',8,'defo_max',8,'ref_lon',ref_lon,'lonc',lon_eq,'latc',lat_eq);
-%     plot_insar_model_resampled(['ALOS2/los_samp',num2str(iint),'.mat'],insar_model3,'iter_step',iint,'fault',fault_file,'model_type',model_type,'misfit_range',8,'defo_max',8,'ref_lon',ref_lon,'lonc',lon_eq,'latc',lat_eq);
+    plot_insar_model_resampled(['ASC100/LOS2/los_samp',num2str(iint),'.mat'],insar_model1,'iter_step',iint,'fault',fault_file,'model_type',model_type,'misfit_range',30,'defo_max',120,'ref_lon',ref_lon,'lonc',lon_eq,'latc',lat_eq);
+    plot_insar_model_resampled(['DES5/LOS2/los_samp',num2str(iint),'.mat'],insar_model2,'iter_step',iint,'fault',fault_file,'model_type',model_type,'misfit_range',30,'defo_max',120,'ref_lon',ref_lon,'lonc',lon_eq,'latc',lat_eq);
+%     plot_insar_model_resampled(['ALOS2_SCAN2/los_samp',num2str(iint),'.mat'],insar_model3,'iter_step',iint,'fault',fault_file,'model_type',model_type,'misfit_range',30,'defo_max',120,'ref_lon',ref_lon,'lonc',lon_eq,'latc',lat_eq);
 %     plot_insar_model_resampled(['ALOS2_stripe/LOS/los_samp',num2str(iint),'.mat'],insar_model4,'iter_step',iint,'fault',fault_file,'model_type',model_type,'misfit_range',30,'ref_lon',ref_lon,'lonc',lon_eq,'latc',lat_eq);
 %     plot_insar_model_resampled(['ALOS2_stripe/MAI2/los_samp',num2str(iint),'.mat'],insar_model5,'iter_step',iint,'fault',fault_file,'model_type',model_type,'misfit_range',40,'ref_lon',ref_lon,'lonc',lon_eq,'latc',lat_eq);
     
-%     plot_insar_model_resampled(['ASC64/branch_cut/three_subswath/los_samp',num2str(iint),'.mat'],insar_model1,'iter_step',iint,'fault',fault_file,'axis_range',[-60,60,-20,70],'model_type',model_type);
-%     plot_insar_model_resampled(['DES71/branch_cut/three_subswath/los_samp',num2str(iint),'.mat'],insar_model2,'iter_step',iint,'fault',fault_file,'axis_range',[-55,50,-20,75],'model_type',model_type);
-%     plot_insar_model_resampled(['ALOS-2/T065/three_subswath/los_samp',num2str(iint),'.mat'],insar_model3,'iter_step',iint,'fault',fault_file,'axis_range',[-35,35,-5,60],'model_type',model_type);
-%     plot_insar_model_resampled(['ALOS-2/T066/three_subswath/los_samp',num2str(iint),'.mat'],insar_model4,'iter_step',iint,'fault',fault_file,'axis_range',[-45,35,-10,60],'model_type',model_type);
-%     plot_insar_model_resampled(['ASC64/offsets/los_samp',num2str(iint),'.mat'],insar_model5,'misfit_range',20,'iter_step',iint,'fault',fault_file,'axis_range',[-30,20,0,50],'model_type',model_type);
-%     plot_insar_model_resampled(['DES71/offsets/los_samp',num2str(iint),'.mat'],insar_model6,'misfit_range',20,'iter_step',iint,'fault',fault_file,'axis_range',[-30,20,0,50],'model_type',model_type);
-%     plot_insar_model_resampled(['Cosmo_Skymed/ASC_offsets/los_samp',num2str(iint),'.mat'],insar_model7,'misfit_range',20,'iter_step',iint,'fault',fault_file,'axis_range',[-30,20,0,50],'model_type',model_type);
-%     plot_insar_model_resampled(['Cosmo_Skymed/DES_offsets/los_samp',num2str(iint),'.mat'],insar_model8,'misfit_range',20,'iter_step',iint,'fault',fault_file,'axis_range',[-30,20,0,50],'model_type',model_type);
-% %     plot_gps_model('GPS/Floyd_GPS/gps_syn.mat',Floyd_gps_model,'iter_step',iint,'data_type','survey','model_type',model_type);
-% %     plot_gps_model('GPS/survey_GPS/gps_syn.mat',survey_gps_model,'iter_step',iint,'data_type','survey','model_type',model_type);
-% %     plot_gps_model('GPS/continue_GPS/Peng_far_GPS/Peng_far_gps_3d.mat',cgps_model,'iter_step',iint,'data_type','cont','model_type',model_type);
-%    plot_gps_model('GPS/Floyd_GPS/Floyd_GPS_all.mat',Floyd_gps_model,'iter_step',iint,'data_type','survey','model_type',model_type);
-%    plot_gps_model('GPS/survey_GPS/survey_gps_2d.mat',survey_gps_model,'iter_step',iint,'data_type','survey','site_name','GPS/survey_GPS/campaign_sites','model_type',model_type);
  
+    % verify GPS component
+%     modelx = survey_gps_model(1:2)' * 10;  % to mm
+%     modely = survey_gps_model(3:4)' * 10;
+%     
+%     disp(['The model predictions of North components (ALAI, ALA6) are ', num2str(modely), ' mm']);
+%     disp('The observations of North components (ALAI, ALA6) are -11.6 and -17.6 mm');
+%     disp(' ');
+%     
+%     disp(['The model predictions of East components (ALAI, ALA6) are ', num2str(modelx), ' mm']);
+%     disp('The observations of East components (ALAI, ALA6) are 4.3 and 8.1 mm');
+%     disp(' ');
+
 %     % compute the moment contributed by M6 and M7 events individually    
 %     all_indx = [1:size(slip_model,1)]';
 %     segID = slip_model(:,1);

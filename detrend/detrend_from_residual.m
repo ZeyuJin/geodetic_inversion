@@ -85,7 +85,8 @@ function detrend_from_residual(this_track,varargin)
 %     slip_model = load('fault_M5.slip');
 %     tmp = load('resample/4_segments/homo_4data.mat');
 %     tmp = load('resample/misfit_include_MAI/homo_better_data.mat');
-    tmp = load('resample/two_segments/afterslip_strike.mat');
+    tmp = load('resample/improve_unwrap/homo_all_better_data.mat');
+%     tmp = load('resample/two_segments/afterslip_strike.mat');
     slip_model = tmp.slip_model;
     
     

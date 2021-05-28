@@ -210,36 +210,37 @@ status = fclose(fedc);
 disp(status);
 			   
 
-%%%%% call sum_layered to calculate Greens functions
-if obs_type == 0
-    comstr = ['/Users/zej011/work/software/edgrn_edcmp_2003/edcmp2.0 ',data_dir, ...
-              '/edcmp_ridge',num2str(count),'.inp ',data_dir,'/full_obs'];
-else
-    comstr = ['/Users/zej011/work/software/edgrn_edcmp_2003/edcmp2.0 ',data_dir, ...
-              '/edcmp_ridge',num2str(count),'.inp '];
-end
-disp(comstr);
-system(comstr);
-
-output_str = ['awk ''NR>3 {print $0}'' ',data_dir,'/outdata/',pref,'.',out_type,' > ', ...
-               data_dir,'/outdata/data_only'];
-system(output_str);
-
-%%%%% read sum_layered output Greens function
-out = load([data_dir,'/outdata/data_only']); 
-if strcmp(out_type,'disp')
-    ux = out(:,4);
-    uy = out(:,3);
-    uz = -out(:,5);
-    U = [ux,uy,uz];
-elseif strcmp(out_type,'strs')
-    Sxx = out(:,3);
-    Syy = out(:,4);
-    Szz = out(:,5);
-    Sxy = out(:,6);
-    Syz = out(:,7);
-    Szx = out(:,8);
-    U = [Sxx,Syy,Szz,Sxy,Szx,Syz];
-end
+% %%%%% call sum_layered to calculate Greens functions
+% if obs_type == 0
+%     comstr = ['/Users/zej011/work/software/edgrn_edcmp_2003/edcmp2.0 ',data_dir, ...
+%               '/edcmp_ridge',num2str(count),'.inp ',data_dir,'/full_obs'];
+% else
+%     comstr = ['/Users/zej011/work/software/edgrn_edcmp_2003/edcmp2.0 ',data_dir, ...
+%               '/edcmp_ridge',num2str(count),'.inp '];
+% end
+% disp(comstr);
+% system(comstr);
+% 
+% output_str = ['awk ''NR>3 {print $0}'' ',data_dir,'/outdata/',pref,'.',out_type,' > ', ...
+%                data_dir,'/outdata/data_only'];
+% system(output_str);
+% 
+% %%%%% read sum_layered output Greens function
+% out = load([data_dir,'/outdata/data_only']); 
+% if strcmp(out_type,'disp')
+%     ux = out(:,4);
+%     uy = out(:,3);
+%     uz = -out(:,5);
+%     U = [ux,uy,uz];
+% elseif strcmp(out_type,'strs')
+%     Sxx = out(:,3);
+%     Syy = out(:,4);
+%     Szz = out(:,5);
+%     Sxy = out(:,6);
+%     Syz = out(:,7);
+%     Szx = out(:,8);
+%     U = [Sxx,Syy,Szz,Sxy,Szx,Syz];
+% end
+U = 0;
 
 end
