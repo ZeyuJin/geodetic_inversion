@@ -1,6 +1,11 @@
 # geodetic_inversion
 This repo homogeneous/layered inversion using InSAR/GPS
 
+References:
+Jin, Z., & Fialko, Y. (2020). Finite slip models of the 2019 Ridgecrest earthquake sequence constrained by space geodetic data and aftershock locations. Bull. Seism. Soc. Am., 110, 1660–1679.
+
+Jin, Z., & Fialko, Y. (2021). Coseismic and early postseismic deformation due to the 2021 M7. 4 Maduo (China) earthquake. Geophysical Research Letters, 48(21), e2021GL095213.
+
 ---
 ## Step 1 ~ 2 are written in the file `main_detrend_inversion.m`
 ### Step 0: setup your MATLAB, CSHELL and GMT paths.
