@@ -3,12 +3,14 @@ This repo homogeneous/layered inversion using InSAR/GPS
 
 Please cite these codes as:
 
-Jia, Z., Jin, Z., Marchandon, M., Ulrich, T., Gabriel, A. A., Fan, W., ... & Fialko, Y. (2023). The complex dynamics of the 2023 Kahramanmaraş, Turkey, M w 7.8-7.7 earthquake doublet. Science, 381(6661), 985-990.
+
 
 ## References:
 Jin, Z., & Fialko, Y. (2020). Finite slip models of the 2019 Ridgecrest earthquake sequence constrained by space geodetic data and aftershock locations. Bull. Seism. Soc. Am., 110, 1660–1679.
 
 Jin, Z., & Fialko, Y. (2021). Coseismic and early postseismic deformation due to the 2021 M7. 4 Maduo (China) earthquake. Geophysical Research Letters, 48(21), e2021GL095213.
+
+Jia, Z., Jin, Z., Marchandon, M., Ulrich, T., Gabriel, A. A., Fan, W., ... & Fialko, Y. (2023). The complex dynamics of the 2023 Kahramanmaraş, Turkey, M w 7.8-7.7 earthquake doublet. Science, 381(6661), 985-990.
 
 ---
 ## Step 1 ~ 2 are written in the file `main_detrend_inversion.m`
