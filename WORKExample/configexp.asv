@@ -1,0 +1,20 @@
+%experimentally read the configuration file
+%11/3/2022, Xiaoyu Zou, x3zou@ucsd.edu
+clear
+clc
+addpath('/Users/xiaoyuzou/Library/CloudStorage/OneDrive-UCSanDiego/geodetic_inversion-master/sign_mask')
+addpath('/Users/xiaoyuzou/Library/CloudStorage/OneDrive-UCSanDiego/geodetic_inversion-master/WORK/ASC100/LOS2')
+addpath('/Users/xiaoyuzou/Library/CloudStorage/OneDrive-UCSanDiego/geodetic_inversion-master/WORK/DES5/LOS2')
+setenv('PATH',[getenv('PATH'),':/opt/homebrew/bin']);  % add the path of GMT
+configtest='configtest.txt';
+fid = fopen(configtest);
+tmp_txt = fgetl(fid);
+while tmp_txt ~=-1
+    skip=find(tmp_txt=='#');
+
+    if ~isempty(skip)
+        continue
+    end
+    tmp_txt
+    
+end
