@@ -1,8 +1,6 @@
 # geodetic_inversion
 This repo homogeneous/layered inversion using InSAR/GPS
 
-Please cite these codes as:
-
 
 
 ## References:
