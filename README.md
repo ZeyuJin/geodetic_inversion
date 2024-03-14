@@ -1,5 +1,7 @@
 # geodetic_inversion
 This repo homogeneous/layered inversion using InSAR/GPS
+Please cite these codes as:
+Zhe Jia et al. ,The complex dynamics of the 2023 Kahramanmaraş, Turkey, Mw 7.8-7.7 earthquake doublet.Science381,985-990(2023).DOI:10.1126/science.adi0685
 
 ## References:
 Jin, Z., & Fialko, Y. (2020). Finite slip models of the 2019 Ridgecrest earthquake sequence constrained by space geodetic data and aftershock locations. Bull. Seism. Soc. Am., 110, 1660–1679.
