@@ -24,6 +24,10 @@ function mask_insar_phase(filepath,insar_file,mask_file,wavelength,varargin)
                         los_max = varargin{CC*2};
                     case 'detrend'
                         detrend = varargin{CC*2};
+                    case 'nomask'
+                        nomask = varargin{CC*2};
+                    case 'mask'
+                        mask = varargin{CC*2};
                 end
             catch
                 error('Unrecognized Keyword');
@@ -47,24 +51,30 @@ function mask_insar_phase(filepath,insar_file,mask_file,wavelength,varargin)
 %             disp('No dem_samp.grd found! Do not detrend the phase!');
 %         end          
 %     end
-
-    % all mask?.txt saved in a common file
-    fid = fopen([this_track,'/',mask_file]);
-    C = textscan(fid,'%s\n');
-    mask_all = C{1};
-    n_mask = length(mask_all);
-    fclose(fid);
+% in the case you want to mask out the near-field unwrapping errors
+    if mask
+        % all mask?.txt saved in a common file
+        fid = fopen([this_track,'/',mask_file]);
+        C = textscan(fid,'%s\n');
+        mask_all = C{1};
+        n_mask = length(mask_all);
+        fclose(fid);
 
 %     unw_clean = unw;
-    for ii = 1:n_mask
-        msk_path = [this_track,'/',mask_all{ii}];
-        area = load(msk_path);
-        tmp = mask_phase(mlon,mlat,unw,area,mask_type);
-        unw = tmp;
-        clear tmp
+        for ii = 1:n_mask
+            msk_path = [this_track,'/',mask_all{ii}];
+            area = load(msk_path);
+            tmp = mask_phase(mlon,mlat,unw,area,mask_type);
+            unw = tmp;
+            clear tmp
+        end
+        unw_clean = unw;
     end
-    unw_clean = unw;
-%     unw = unw_old;
+
+    % in the case you don't want masking
+    if nomask
+        unw_clean = unw_old;
+    end
     
     % if detrend the phase with topo
     ramp = zeros(size(unw_clean));
