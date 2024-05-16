@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+	<Document>
+		<Style id="st-86420-0">
+			<IconStyle>
+				<Icon>
+					<href>http://maps.google.com/mapfiles/kml/pal4/icon57.png</href>
+				</Icon>
+				<scale>1</scale>
+				<color>ff80c0ff</color>
+			</IconStyle>
+			<LineStyle>
+				<color>ff000000</color>
+				<width>3</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>ff80c0ff</color>
+				<fill>1</fill>
+				<outline>1</outline>
+			</PolyStyle>
+			<LabelStyle>
+				<scale>1</scale>
+				<color>bfffffff</color>
+			</LabelStyle>
+		</Style>
+		<Style id="st-86420-1">
+			<LineStyle>
+				<color>ff000000</color>
+				<width>3</width>
+			</LineStyle>
+		</Style>
+		<Style id="st-86420-2">
+			<LineStyle>
+				<color>ffffffff</color>
+				<width>3</width>
+			</LineStyle>
+		</Style>
+		<Style id="st-86420-3">
+			<LineStyle>
+				<color>ff808080</color>
+				<width>3</width>
+			</LineStyle>
+		</Style>
+		<Style id="st-86420-4">
+			<LineStyle>
+				<color>ffffffff</color>
+				<width>3</width>
+			</LineStyle>
+		</Style>
+		<Folder>
+			<name>curved3.txt</name>
+			<Placemark>
+				<name>Line 0</name>
+				<styleUrl>#st-86420-0</styleUrl>
+				<LineString>
+					<tessellate>1</tessellate>
+					<coordinates>
+						98.9252849716,34.4987772806,0
+						98.9508558324,34.4967332225,0
+						98.9772528488,34.4881102129,0
+						99.0034755341,34.4860088674,0
+						99.040636089,34.4853028184,0
+						99.0644643087,34.4808840998,0
+						99.10069232,34.4840346569,0
+						99.1332112589,34.4864595176,0
+						99.1701771787,34.4860393362,0
+						99.2025065766,34.4943656176,0
+						99.2430667071,34.5046734539,0
+						99.2766414077,34.5174759402,0
+						99.2955714553,34.5278659878,0
+					</coordinates>
+				</LineString>
+			</Placemark>
+		</Folder>
+	</Document>
+</kml>

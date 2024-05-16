@@ -1,0 +1,7 @@
+# original data has fewer triangles
+# e.g., triangle_fault1_original.mat
+DT1: 298;  DT2: 63;  DT3: 71
+
+# Precise format:
+# e.g., triangle_fault1.mat
+DT1: 669;  DT2: 145;  DT3: 167
