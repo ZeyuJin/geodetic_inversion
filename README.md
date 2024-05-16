@@ -1,6 +1,10 @@
 # geodetic_inversion
 This repo homogeneous/layered inversion using InSAR/GPS
 
+New: currently the repo also supports non-linear fault construction and inversion!
+
+<img width="576" alt="image" src="https://github.com/ZeyuJin/geodetic_inversion/assets/8068029/722a8fbf-9b73-4128-a643-ca581e801789">
+
 
 
 ## References:
@@ -13,7 +17,7 @@ Jin, Z., & Fialko, Y. (2021). Coseismic and early postseismic deformation due to
 
 Jia, Z., Jin, Z., Marchandon, M., Ulrich, T., Gabriel, A. A., Fan, W., ... & Fialko, Y. (2023). The complex dynamics of the 2023 Kahramanmaraş, Turkey, M w 7.8-7.7 earthquake doublet. Science, 381(6661), 985-990.
 
-
+Jin, Z., Fialko, Y., Yang, H., & Li, Y. (2023). Transient deformation excited by the 2021 M7. 4 Maduo (China) earthquake: Evidence of a deep shear zone. Journal of Geophysical Research: Solid Earth, 128(8), e2023JB026643.
 
 ---
 ## Step 1 ~ 2 are written in the file `main_detrend_inversion.m`
