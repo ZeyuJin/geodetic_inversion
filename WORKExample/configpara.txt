@@ -1,0 +1,47 @@
+#############Configuration File for Geodetic Inversion, For Parameters###############
+##lonf
+#lonf/latf is the coordinate of pixel point
+73.215150
+##latf
+37.754558
+##ref_lon
+#central meridian to compute UTM coordinates: This parameter is necessary because UTM coordinates are generally confined within a single UTM zone. If your study area crosses two different UTM zones, it would be complicated to convert to the UTM coordinates at the UTM zone boundary directly. So we shift the central meridian to the west (ref_lon), so that you could define a broader UTM zone than the common one. Usualy choose a ref_lon <= lonc.
+71
+##threshold
+#pixels within 500m would be averaged in order to get the value at that point
+0.5
+##lonc
+#lonc/latc is the coordinate of reference point (0,0)
+72
+##latc
+38.5
+##Nmin
+#Minimum size of points to be averaged (Nmin x Nmin).
+2
+##Nmax
+#Maximum size of points to be averaged (Nmax x Nmax)
+400
+##dip_change_id_start
+#The array of fault IDs that have dip angles NOT equal to 90 degrees.
+1
+##dip_change_id_end
+5
+##dip_angle
+# The array of dip angles that are consistent with the array of dip_change_id
+87.7
+81.8
+85
+89.3
+89.3
+##iter_step
+#The steps during the iterative sampling and inversion (=0: initial step; =1: iterative sampling/inversion)
+0
+##iter_step2
+1
+##Con
+#strike
+-1
+#dip
+0
+#normal
+0
