@@ -176,6 +176,6 @@ Tha parameters are the same as Step 5.
 13. Dip-slip of each patch (default is cm)
 
 **The plot of model in the example is displayed as follows:**
-![model](./WORK/model.jpg)
-![ASC100](./WORK/ASC100.jpg)
-![DES5](./WORK/DES5.jpg)
+![model](./WORKExample/model.jpg)
+![ASC100](./WORKExample/ASC100.jpg)
+![DES5](./WORKExample/DES5.jpg)
