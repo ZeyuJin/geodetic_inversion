@@ -25,7 +25,7 @@ scale = -4*pi;                 % for offsets data
 this_track = '/Users/zej011/coseismic/DES5/LOS3';
 insar_file = 'unwrap_ll.grd';
 mask_file = 'mask_txt';
-mask_insar_phase(this_track,insar_file,mask_file,wavelength_C,'los_max',80,'detrend',1);
+mask_insar_phase(this_track,insar_file,mask_file,wavelength_C,'los_max',80,'detrend',1,'mask');
 
 % this_track = '/Users/zej011/coseismic/ASC100/offsets';
 % insar_file = 'rng_off_filt_ll.grd';
