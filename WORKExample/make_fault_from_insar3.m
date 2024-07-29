@@ -5,7 +5,7 @@ function [slip_model,RMS_misfit,model_roughness,insar_model1,insar_model2] = mak
 % added data_list input later for experiment. Xiaoyu Zou, 11/2/2022
 
 %% default values
-lambda = 1e-1;%default 1e-1
+lambda = 0.3e-1;%default 1e-1
 
 %alpha=1;%weight to the interferogram, default 1
 beta=1;%weight to the offsets data, defaut 0.2
