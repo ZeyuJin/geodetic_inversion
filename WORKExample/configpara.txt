@@ -20,7 +20,7 @@
 2
 ##Nmax
 #Maximum size of points to be averaged (Nmax x Nmax)
-400
+150
 ##dip_change_id_start
 #The array of fault IDs that have dip angles NOT equal to 90 degrees.
 1
