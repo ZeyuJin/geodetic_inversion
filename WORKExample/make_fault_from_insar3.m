@@ -112,12 +112,12 @@ bottom_layer_no = max(slip_model(:,3)); ratio = 5e-4;
 % right_fault = [11,1];   ratio = 3e-4;%tested by xiaoyu
 % [Wr,dr] = zero_slip_boundary(slip_model,right_fault,'left',ratio);%used to be right, tested by xiaoyu to make it 'left'
 
-left_fault = 4:5;
+left_fault = 1;
 ratio = 3e-4;
-[Wr,dr] = zero_slip_boundary(slip_model,left_fault,'left',ratio);%used to be left, tested by xiaoyu to make it 'right'
+[Wr,dr] = zero_slip_boundary(slip_model,left_fault,'right',ratio);%used to be left, tested by xiaoyu to make it 'right'
 
-right_fault = 1;   ratio = 3e-4;%tested by xiaoyu
-[Wl,dl] = zero_slip_boundary(slip_model,right_fault,'right',ratio);%used to be right, tested by xiaoyu to make it 'left'
+right_fault = 4:5;   ratio = 3e-4;%tested by xiaoyu
+[Wl,dl] = zero_slip_boundary(slip_model,right_fault,'left',ratio);%used to be right, tested by xiaoyu to make it 'left'
 
 
 %% construct the Green's function
@@ -237,6 +237,6 @@ insar_model2 = G2_raw * u;
 %     model58 = slip_model(indx_M58,:);
 %     compute_moment(model54,model_type);
 %     compute_moment(model58,model_type);
-%       compute_moment(slip_model,model_type);
+compute_moment(slip_model,model_type);
     
 end  
