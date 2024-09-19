@@ -1,4 +1,4 @@
-function [lb,ub]=bounds_new(NS,NT,tSm,add_col)
+function [lb,ub]=bounds_new(NS,NT,tSm,add_col,Con)
 % no slip larger than 10 m (default)
 % tailored constraints for each degree of freedom
 %F=2;   % degree of freedom (same as Mode)
@@ -11,7 +11,7 @@ function [lb,ub]=bounds_new(NS,NT,tSm,add_col)
 %lb=-1e2*ones(NT*sum(tSm),1);  %lower bound
 %ub=1e2*ones(NT*sum(tSm),1);   %upper bound
 % Con=[-1 -1 0];  % Calico/Rodman slip 
-Con=[1 0 0];  % Sign constraint; put 1 for positivity, -1 for
+%Con=[1 0 0];  % Sign constraint; put 1 for positivity, -1 for
 %Con=[0 0 -1];  % Sign constraint; put 1 for positivity, -1 for
 %Con=[-1 0 -1];  % Sign constraint; put 1 for positivity, -1 for
               % negativity, 0 for no constraint
