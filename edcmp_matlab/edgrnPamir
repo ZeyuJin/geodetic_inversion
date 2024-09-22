@@ -1,0 +1,92 @@
+#=============================================================================
+# This is the input file of FORTRAN77 program "edgrn" for calculating
+# the Green's functions of a layered elastic half-space earth model. All
+# results will be stored in the given directory and provide the necessary
+# data base for the program "edcmp" for computing elastic deformations
+# (3 displacement components, 6 strain/stress components and 2 vertical tilt
+# components) induced by a general dislocation source.
+#
+# For questions please contact with e-mail to "wang@gfz-potsdam.de".
+#
+# First implemented in May, 1997
+# Last modified: Nov, 2001
+#
+# by Rongjiang Wang
+# GeoForschungsZetrum Potsdam, Telegrafenberg, 14473 Potsdam, Germany
+#
+# For questions and suggestions please send e-mails to wang@gfz-potsdam.de
+#
+#------------------------------------------------------------------------------
+#
+#	PARAMETERS FOR THE OBSERVATION PROFILE
+#	======================================
+# 1. the uniform depth of the observation points [m]
+# 2. number of the equidistant radial distances (max. = nrmax in edgglobal.h),
+#    the start and end of the distances [m]
+# 3. number of the equidistant source depths (max. = nzsmax in edgglobal.h),
+#    the start and end of the source depths [m]
+#
+#    If possible, please choose the observation depth either significantly
+#    different from the source depths or identical with one of them.
+#
+#    The 2D distance and depth grids defined here should be necessarily large
+#    and dense enough for the discretisation of the real source-observation
+#    configuration to be considered later.
+#
+#    r1,r2 = minimum and maximum horizontal source-observation distances
+#    z1,z2 = minimum and maximum source depths
+#
+#------------------------------------------------------------------------------
+   0.000d+00                              |dble: obs_depth;
+  1530  0.00d+00    700.00d+03              |int: nr; dble: r1, r2;
+   161  0.00d+00     70.00d+03              |int: nzs; dble: zs1, zs2;
+#------------------------------------------------------------------------------
+#
+#	WAVENUMBER INTEGRATION PARAMETERS
+#	=================================
+# 1. sampling rate for wavenumber integration (the ratio between the Nyquist
+#    wavenumber and the really used wavenumber sample; the suggested value is
+#    10-128: the larger this value is chosen, the more accurate are the results
+#    but also the more computation time will be required)
+#------------------------------------------------------------------------------
+ 128                            |dble: srate;
+#------------------------------------------------------------------------------
+#
+#	OUTPUT FILES
+#	============
+#
+# 1. output directory, the three file names for fundamental Green's functions
+#    Note that all file or directory names should not be longer than 80
+#    characters. Directories must be ended by / (unix) or \ (dos)!
+#------------------------------------------------------------------------------
+ './edgrnfcts/'  'ridge.ss'  'ridge.ds'  'ridge.cl'  |char: outputs,grnfile(3);
+#------------------------------------------------------------------------------
+#
+#	MULTILAYERED MODEL PARAMETERS
+#	=============================
+# The interfaces at which the elastic parameters are continuous, the surface
+# and the upper boundary of the half-space are all defined by a single data
+# line; The interfaces, at which the elastic parameters are discontinuous,
+# are all defined by two data lines. This input format would also be needed for
+# a graphic plot of the layered model.
+#
+# Layers which have different upper and lower parameter values, will be treated
+# as layers with a constant gradient, and will be discretised by a number of
+# homogeneous sublayers. Errors due to the discretisation are limited within
+# about 5%.
+#
+# 1. total number of the data lines (max. = lmax in edgglobal.h)
+# 2. table for the layered model (30 GPa)
+#------------------------------------------------------------------------------
+  7                               |int: no_model_lines;
+#------------------------------------------------------------------------------
+#    no  depth[m]       vp[m/s]         vs[m/s]        ro[kg/m^3]
+#------------------------------------------------------------------------------
+  1      0.000d+00      4.70d+03       2.71d+03       2.3148d+03
+  2      2.000d+03      4.70d+03       2.71d+03       2.3148d+03
+  3      2.000d+03      5.90d+03       3.55d+03       3.3327d+03
+  4      27.000d+03      6.00d+03       3.60d+03       3.2793d+03
+  5      27.000d+03      6.10d+03       3.55d+03       3.2533d+03  
+  6      65.000d+03      7.10d+03       4.15d+03       3.2516d+03
+  7      65.000d+03      8.05d+03       4.60d+03       3.2516d+03
+#=======================end of input==========================================
