@@ -79,7 +79,6 @@ sign_mask_offset(this_track, 'los_clean_unmasked.grd');
 ## Step 3 ~ 7 are written in the file `main_detrend_inversion.m`
 ### Step 3: apply quad-tree sampling to all detrended data (LOS/RNG/AZO)
 - `fault_file`: file that writes linearized fault segments (Format: lon1  lat1  lon2  lat2, each pair correponds to one fault end)
--  ## Sometimes, little prior knowledge of the fault is available (length, depth, dipping angles, location, etc.), so it is beneficial to use an [MCMC Bayesian Inversion](https://github.com/evavra/pyffit) to pin it down.
 - `area = [71.8 73.9 37.7 39.1]`: rectangular area that crops the InSAR grid file
 - `los_list`: list of InSAR directories that are to be downsampled (Format: this_track, number_of_sampled_points(e.g.,3000))
 - `Nmin = 2`: Minimum size of points to be averaged (Nmin x Nmin).
@@ -92,6 +91,8 @@ distance in order to catch the curve gradient**
 
 
 ### Step 4: build the fault geometry
+-  ## Sometimes, little prior knowledge of the fault is available (length, depth, dipping angles, location, etc.), so it is beneficial to use an [MCMC Bayesian Inversion](https://github.com/evavra/pyffit) to pin it down.
+
 - `fault_file`: The fault ID is counted based on the order of fault segments written in `fault_file`, all fault segments have a default dip angle of 90 degrees.
 This file is same as the one in Step 3.
 - `dip_change_id = 1:5`: The array of fault IDs that have dip angles **NOT** equal to 90 degrees.
