@@ -9,6 +9,8 @@ function mask_insar_phase(filepath,insar_file,mask_file,wavelength,varargin)
     grid_size = 100;    % sub-grid the file in 100 meters resolution (default)   
     los_max = 6;  % in cm
     detrend = 0;
+    mask = 1;
+    nomask = 0;
     
     if ~isempty(varargin)
         for CC = 1:floor(length(varargin)/2)
@@ -52,7 +54,7 @@ function mask_insar_phase(filepath,insar_file,mask_file,wavelength,varargin)
 %         end          
 %     end
 % in the case you want to mask out the near-field unwrapping errors
-    if mask
+    if mask==1
         % all mask?.txt saved in a common file
         fid = fopen([this_track,'/',mask_file]);
         C = textscan(fid,'%s\n');
@@ -72,7 +74,7 @@ function mask_insar_phase(filepath,insar_file,mask_file,wavelength,varargin)
     end
 
     % in the case you don't want masking
-    if nomask
+    if nomask==1
         unw_clean = unw_old;
     end
     
