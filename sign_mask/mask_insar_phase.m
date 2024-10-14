@@ -9,7 +9,7 @@ function mask_insar_phase(filepath,insar_file,mask_file,wavelength,varargin)
     grid_size = 100;    % sub-grid the file in 100 meters resolution (default)   
     los_max = 6;  % in cm
     detrend = 0;
-    mask = 1;
+    mask = 0;
     nomask = 0;
     
     if ~isempty(varargin)
