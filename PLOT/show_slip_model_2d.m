@@ -1,5 +1,6 @@
 function show_slip_model_2d(slip_model,varargin)
 % Plotting the 2-d profile of the slip mode
+% Xiaoyu Zou 04/09/2025
 format long
 %set(0,'defaultAxesFontName', 'AvantGarde')
 %set(0,'defaultAxesFontSize', 15)
