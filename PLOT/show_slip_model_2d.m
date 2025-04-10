@@ -96,8 +96,8 @@ for k=1:max(slip_model(:,1))
         N=size(this_layer,1);
         lp=this_layer(:,7);
         wp=this_layer(:,8);
-        slip1=-this_layer(:,12)/100;
-        slip2=-this_layer(:,13)/100;
+        slip1=this_layer(:,12)/100;
+        slip2=this_layer(:,13)/100;
         for i=1:N
             if i==1
                 x1f=xstart;y1f=ystart;
