@@ -3,7 +3,7 @@ function endpoints = fitPiecewiseLine(data, K)
 % Fitting fault segments coordinates given curved fault surface trace
 % input
 %   data :  N×2  matrix, first colun contitude, second column latitude
-%   K    :  splines to fit (K ≥ 1 and K ≤ N‑1)
+%   K    :  number of splines to fit (K ≥ 1 and K ≤ N‑1)
 %
 % output
 %   endpoints : (K+1)×2  matrix，endpoint coordinates of each segment
