@@ -46,6 +46,8 @@ mask_insar_phase(this_track, insar_file, mask_file, scale, 'los_max', 80, 'detre
 ```
 This step would output a subsampled grid file called "unwrap_clean_sample.grd", in 100 meters resolution as default.
 
+### (Optional & New) using mask_insar_data.m to interactively mask out noisy pixels
+You can directly run the mask_insar_data.m in order to interactively, manually apply masks and sign masks to remove the noisy pixels instead of running the clean_insar_data.m and sign_mask_offset.m
 
 ### Step 2: detrend the phase and remove the phase ambiguity
 If we have enough far-field GPS data, we could use those GPS data to invert a coarse slip model to detrend the unwrapped phase. \
@@ -75,8 +77,7 @@ movefile los_clean_detrend.grd los_clean_unmask.grd
 sign_mask_offset(this_track, 'los_clean_unmasked.grd');
 ```
 
-### (Optional & New) using mask_insar_data.m to interactively mask out noisy pixels
-You can directly run the mask_insar_data.m in order to interactively, manually apply masks and sign masks to remove the noisy pixels instead of running the clean_insar_data.m and sign_mask_offset.m
+
 
 ---
 ## Step 3 ~ 7 are written in the file `main_detrend_inversion.m`
