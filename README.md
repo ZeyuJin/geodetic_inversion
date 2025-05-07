@@ -78,7 +78,7 @@ sign_mask_offset(this_track, 'los_clean_unmasked.grd');
 ---
 ## Step 3 ~ 7 are written in the file `main_detrend_inversion.m`
 ### Step 3: apply quad-tree sampling to all detrended data (LOS/RNG/AZO)
-- `fault_file`: file that writes linearized fault segments (Format: lon1  lat1  lon2  lat2, each pair correponds to one fault end)
+- `fault_file`: file that writes linearized fault segments (Format: lon1  lat1  lon2  lat2, each pair corresponds to one fault end). The fault file can be obtained via 1) local fault database 2) manually tracing the fault coordinate from remote-sensing data. You can use the function 'fitPiecewiseLine.m' to construct fault segments from the curved surface trace coordinate data.
 - `area = [71.8 73.9 37.7 39.1]`: rectangular area that crops the InSAR grid file
 - `los_list`: list of InSAR directories that are to be downsampled (Format: this_track, number_of_sampled_points(e.g.,3000))
 - `Nmin = 2`: Minimum size of points to be averaged (Nmin x Nmin).
