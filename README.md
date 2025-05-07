@@ -75,6 +75,9 @@ movefile los_clean_detrend.grd los_clean_unmask.grd
 sign_mask_offset(this_track, 'los_clean_unmasked.grd');
 ```
 
+### (Optional & New) using mask_insar_data.m to interactively mask out noisy pixels
+You can directly run the mask_insar_data.m in order to interactively, manually apply masks and sign masks to remove the noisy pixels instead of running the clean_insar_data.m and sign_mask_offset.m
+
 ---
 ## Step 3 ~ 7 are written in the file `main_detrend_inversion.m`
 ### Step 3: apply quad-tree sampling to all detrended data (LOS/RNG/AZO)
