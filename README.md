@@ -50,6 +50,7 @@ This step would output a subsampled grid file called "unwrap_clean_sample.grd", 
 You can directly run the mask_insar_data.m in order to interactively, manually apply masks and sign masks to remove the noisy pixels instead of running the clean_insar_data.m and sign_mask_offset.m
 
 ### Step 2: detrend the phase and remove the phase ambiguity
+There are several ways to detrend the data
 If we have enough far-field GPS data, we could use those GPS data to invert a coarse slip model to detrend the unwrapped phase. \
 In cases such as Pamir and Qinghai earthquake, since we do not have enough GPS sites covered, we could just assume a far-field pixel that corresponds to zero displacement.
 ```MATLAB
@@ -66,6 +67,17 @@ remove_ref_from_grid(grdin,grdout,lonf,latf,ref_lon,threshold);
 - `ref_lon`: central meridian to compute UTM coordinates: This parameter is necessary because UTM coordinates are generally confined within a single UTM zone.
 If your study area crosses two different UTM zones, it would be complicated to convert to the UTM coordinates at the UTM zone boundary directly. 
 So we shift the central meridian to the west (ref_lon), so that you could define a broader UTM zone than the common one. Usualy choose a ref_lon <= lonc.
+
+Alternatively, you can try to fit a ramp to the data to detrend it
+```MATLAB
+[ramp,cffs]=deramp_xyz[Z,X,Y,code]
+```
+or fit a ramp to the residuals of an initial inversion, and subtract it from the data to produce the deramped data
+```MATLAB
+deramp_from_residuals.m
+```
+
+
 
 
 ### (Optional) apply the sign mask for the detrended offset data
