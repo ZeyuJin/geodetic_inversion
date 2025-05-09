@@ -50,7 +50,7 @@ This step would output a subsampled grid file called "unwrap_clean_sample.grd", 
 You can directly run the mask_insar_data.m in order to interactively, manually apply masks and sign masks to remove the noisy pixels instead of running the clean_insar_data.m and sign_mask_offset.m
 
 ### Step 2: detrend the phase and remove the phase ambiguity
-There are several ways to detrend the data
+There are several ways to detrend the data. You can try them to see which one works the best for you. \
 If we have enough far-field GPS data, we could use those GPS data to invert a coarse slip model to detrend the unwrapped phase. \
 In cases such as Pamir and Qinghai earthquake, since we do not have enough GPS sites covered, we could just assume a far-field pixel that corresponds to zero displacement.
 ```MATLAB
