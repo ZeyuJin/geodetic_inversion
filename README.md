@@ -1,4 +1,4 @@
-# geodetic_inversion (SlipSolve)
+# SlipSolve: Geodetic Linear Inversion
 This repo homogeneous/layered inversion using InSAR/GPS
 
 New: currently the repo also supports non-linear fault construction and inversion!
