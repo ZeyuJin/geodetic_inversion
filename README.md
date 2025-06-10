@@ -9,7 +9,7 @@ New: currently the repo also supports non-linear fault construction and inversio
 
 ## References:
 
-(Please cite those works if using our codes)
+(Please cite those works if using our codes. Or you can also cite the software only.)
 
 Jin, Z., & Fialko, Y. (2020). Finite slip models of the 2019 Ridgecrest earthquake sequence constrained by space geodetic data and aftershock locations. Bull. Seism. Soc. Am., 110, 1660–1679.
 
