@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "Software-only citation below"
+authors:
+- family-names: "Jin"
+  given-names: "Zeyu"
+- family-names: "Zou"
+  given-names: "Xiaoyu"
+- family-names: "Wang"
+  given-names: "Kang"
+title: "SlipSolve: Geodetic Linear Inversion"
+version: 1.0.0
+doi: 10.5281/zenodo.15634654
+date-released: 2025-06-10
+url: "https://github.com/ZeyuJin/geodetic_inversion"
