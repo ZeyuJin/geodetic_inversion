@@ -1,6 +1,5 @@
 function show_slip_model_2d(slip_model,varargin)
 % Plotting the 2-d profile of the slip mode
-% Xiaoyu Zou 04/09/2025
 format long
 %set(0,'defaultAxesFontName', 'AvantGarde')
 %set(0,'defaultAxesFontSize', 15)
@@ -149,9 +148,9 @@ for k=1:max(slip_model(:,1))
             SLIP=[SLIP;slip0];
 
         end
+    end
         slipmax=max(SLIP);
         quiver(XO,YO,XV/slipmax,YV/slipmax,1.5,'LineWidth',0.5,'Color',[0,0,0]);
-    end
 
 
     if ~isempty(seis_matfile)
@@ -199,11 +198,12 @@ for k=1:max(slip_model(:,1))
     % hc = colorbar('southoutside');
     hc = colorbar;
     title(hc,'slip (m)');
-    if cmax < 5
+    if cmax < 1
         caxis([-cmax cmax]);
     else
         caxis([0 cmax/100]);
     end
+   %caxis([0 0.7]);
     % colorbar off
     % oldcmap = colormap;
     % colormap( flipud(oldcmap) );
