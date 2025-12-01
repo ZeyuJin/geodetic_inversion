@@ -23,7 +23,7 @@ Jin, Z., Fialko, Y., Yang, H., & Li, Y. (2023). Transient deformation excited by
 ## Step 1 ~ 2 are written in the file `main_detrend_inversion.m`
 ### Step 0: setup your MATLAB, CSHELL and GMT paths.
 Please include the MATLABPATH for all directories.
-
+For a complete example, please see 'WorkInversionExample.m' in the 'WORKExample' directory.
 
 ### Step 1: data cleaning using `clean_insar_data.m`
 ```MATLAB
