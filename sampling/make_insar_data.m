@@ -16,6 +16,7 @@ ref_lon = lon_eq;
 sample_area = [-118.8 -116 34.3 36.9];       % for uniform sample in larger area
 METHOD = 'quadtree';
 fault_file = '';
+sample_dem=0; % default: no need to sample dem
 
 %% read varargin values and assembly
 if ~isempty(varargin)
@@ -37,6 +38,8 @@ if ~isempty(varargin)
                     end
                 case 'ref_lon'
                     ref_lon = varargin{CC*2};
+                case 'sample_dem'
+                    sample_dem = varargin{CC*2};
             end
         catch
             error('Unrecognized Keyword');
@@ -134,10 +137,13 @@ for k=1:ntrack
     xin=x1(indx_x);
     yin=y1(indx_y);
     losin=los_this_track(indx_y,indx_x);
+
+    if sample_dem==1
     
-    [xdem,ydem,zdem] = grdread2([this_track,'/dem_samp.grd']);
-    demin = zdem(indx_y,indx_x);
-    clear xdem ydem
+        [xdem,ydem,zdem] = grdread2([this_track,'/dem_samp.grd']);
+        demin = zdem(indx_y,indx_x);
+        clear xdem ydem
+    end
     
     % make sure the grid size of looking angle same with phase (without multi-looking)
     [x2,y2,ze]=grdread2([this_track,'/look_e.grd']);
@@ -162,7 +168,9 @@ for k=1:ntrack
    grdwrite2(xin,yin,ein,[this_track,'/look_e_',file_suffix,'.grd']); 
    grdwrite2(xin,yin,nin,[this_track,'/look_n_',file_suffix,'.grd']);
    grdwrite2(xin,yin,uin,[this_track,'/look_u_',file_suffix,'.grd']);
+   if sample_dem==1
    grdwrite2(xin,yin,demin,[this_track,'/dem_',file_suffix,'.grd']);
+   end
 
    % the resolution of geocoded insar data is about 100 meters
 %    Nmin = 3;   Nmax = 150;  for quad-tree sampling
@@ -177,7 +185,9 @@ for k=1:ntrack
    [xe_out,ye_out,ve]=make_look_downsample(xin,yin,ein,xout,yout,xx1,xx2,yy1,yy2);
    [xn_out,yn_out,vn]=make_look_downsample(xin,yin,nin,xout,yout,xx1,xx2,yy1,yy2);
    [xu_out,yu_out,vz]=make_look_downsample(xin,yin,uin,xout,yout,xx1,xx2,yy1,yy2);
+   if sample_dem==1
    [xdem_out,ydem_out,dem_out]=make_look_downsample(xin,yin,demin,xout,yout,xx1,xx2,yy1,yy2);
+   end
    
    sampled_insar_data=double([xsar,ysar,zout,ve,vn,vz]);     % save the downsampled insar data
    save([this_track,'/los_samp',iint,'.mat'],'sampled_insar_data','rms_out','dem_out');
@@ -186,4 +196,5 @@ for k=1:ntrack
    set(h0,'PaperPositionMode','auto');
 %    set(h0,'visible','off');
    saveas(h0,[this_track,'/','los_samp',num2str(iint)],'epsc');
+
 end
