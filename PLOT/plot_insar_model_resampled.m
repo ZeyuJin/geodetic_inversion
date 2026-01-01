@@ -80,7 +80,7 @@ function plot_insar_model_resampled(sampled_data_file,los_model,varargin)
    
    subplot('Position',[0.04 0.55 0.42 0.42]); hold on
    scatter(xin,yin,sz,losin,'filled');
-   read_plot_fault_segment('SKFS_fault.txt','m');
+   %read_plot_fault_segment('SKFS_fault.txt','m');
    colormap jet
    colorbar
    title(['Sampled Data (',label_name,')']);
@@ -103,7 +103,7 @@ function plot_insar_model_resampled(sampled_data_file,los_model,varargin)
 
    subplot('Position',[0.54 0.55 0.42 0.42]); hold on
    scatter(xin,yin,sz,los_model,'filled');
-   read_plot_fault_segment('SKFS_fault.txt','m');
+   %read_plot_fault_segment('SKFS_fault.txt','m');
    colormap jet
    colorbar
    title('Model');
@@ -125,7 +125,7 @@ function plot_insar_model_resampled(sampled_data_file,los_model,varargin)
 
    subplot('Position',[0.26 0.03 0.42 0.42]); hold on
    scatter(xin,yin,sz,los_res,'filled');
-   read_plot_fault_segment('SKFS_fault.txt','m');
+   %read_plot_fault_segment('SKFS_fault.txt','m');
    colormap jet
    colorbar
    title('Residual');
