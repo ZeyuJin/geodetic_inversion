@@ -193,6 +193,19 @@ Tha parameters are the same as Step 5.
 12. Strike-slip of each patch (default is cm)
 13. Dip-slip of each patch (default is cm)
 
+**Note: Format of the GPS input data
+The code takes two types of GPS measurements: 2d or 3d
+
+For the 2d GPS data, the columns are
+
+[east, north, ue, un, sigma_e, sigma_n] (sigma are the uncertainties)
+
+For the 3d GPS data, the columns are
+
+[east, north, ue, un, uz, sigma_e, sigma_n, sigma_z]
+
+Choose option ‘cgps’ for 3D, and option ‘camp_gps’ for 2D. 
+
 **The plot of model in the example is displayed as follows:**
 ![model](./WORKExample/model.jpg)
 ![ASC100](./WORKExample/ASC100.jpg)
