@@ -193,7 +193,8 @@ Tha parameters are the same as Step 5.
 12. Strike-slip of each patch (default is cm)
 13. Dip-slip of each patch (default is cm)
 
-**Note: Format of the GPS input data
+**Note: Format of the GPS input data**
+
 The code takes two types of GPS measurements: 2d or 3d
 
 For the 2d GPS data, the columns are
