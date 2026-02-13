@@ -72,10 +72,11 @@ Alternatively, you can try to fit a ramp to the data to detrend it
 ```MATLAB
 [ramp,cffs]=deramp_xyz[Z,X,Y,code]
 ```
-or fit a ramp to the residuals of an initial inversion, and subtract it from the data to produce the deramped data
+or fit a ramp to the residuals of an initial inversion, and subtract it from the data to produce the deramped data. 
 ```MATLAB
 deramp_from_residuals.m
 ```
+You may want to mask the near-field data before subtracting the ramp.
 
 
 
