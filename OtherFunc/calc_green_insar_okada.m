@@ -30,9 +30,12 @@ Npara=2*Npatch;
 xe_insar=data_insar(:,1);
 yn_insar=data_insar(:,2);
 zinsar=data_insar(:,3);
-ve_insar=data_insar(:,4);
-vn_insar=data_insar(:,5);
-vz_insar=data_insar(:,6);
+%ve_insar=data_insar(:,4);
+%vn_insar=data_insar(:,5);
+%vz_insar=data_insar(:,6);
+ve_insar=-data_insar(:,4);
+vn_insar=-data_insar(:,5);
+vz_insar=-data_insar(:,6);
 Nobs=length(xe_insar);
 
 G=zeros(Nobs,Npara);
