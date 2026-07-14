@@ -1,7 +1,7 @@
 # SlipSolve: Geodetic Linear Inversion
 This repo homogeneous/layered inversion using InSAR/GPS
 
-New: currently the repo also supports non-linear fault construction and inversion!
+New: currently the repo also supports [non-linear fault construction](https://github.com/x3zou/SlipSolve-Curve/tree/main) and inversion!
 
 <img width="576" alt="image" src="https://github.com/ZeyuJin/geodetic_inversion/assets/8068029/722a8fbf-9b73-4128-a643-ca581e801789">
 
