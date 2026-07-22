@@ -112,7 +112,7 @@ distance in order to catch the curve gradient**
 
 - `fault_file`: The fault ID is counted based on the order of fault segments written in `fault_file`, all fault segments have a default dip angle of 90 degrees.
 This file is same as the one in Step 3. The fault file can be obtained via 1) local fault database 2) manually tracing the fault coordinate from remote-sensing data. You can use the function 'fitPiecewiseLine.m' to construct fault segments from the curved surface trace coordinate data.
-- `dip_change_id = 1:5`: The array of fault IDs that have dip angles **NOT** equal to 90 degrees.
+- `dip_change_id = 1:5`: The array of fault IDs 
 - `dip_angle = [87.7, 81.8, 85, 89.3, 89.3]`: The array of dip angles that are consistent with the array of `dip_change_id`.
 - `len_top = 1.2e3`: The top length of each fault patch
 - `l_ratio = 1.3 % (default)`: len(this_layer) / len(top_layer), follow a geometric progression
