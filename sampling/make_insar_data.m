@@ -18,6 +18,8 @@ METHOD = 'quadtree';
 fault_file = '';
 sample_dem=0; % default: no need to sample dem
 
+
+
 %% read varargin values and assembly
 if ~isempty(varargin)
     for CC = 1:floor(length(varargin)/2)
@@ -190,7 +192,18 @@ for k=1:ntrack
    end
    
    sampled_insar_data=double([xsar,ysar,zout,ve,vn,vz]);     % save the downsampled insar data
-   save([this_track,'/los_samp',iint,'.mat'],'sampled_insar_data','rms_out','dem_out');
+   nan_rows=any(isnan(sampled_insar_data),2);
+   sampled_insar_data(nan_rows,:)=[];
+   rms_out(nan_rows,:)=[];
+   
+   if sample_dem==1
+       dem_out(nan_rows,:)=[];
+       save([this_track,'/los_samp',iint,'.mat'],'sampled_insar_data','rms_out','dem_out');
+   else
+       save([this_track,'/los_samp',iint,'.mat'],'sampled_insar_data','rms_out');
+   end
+
+   %save([this_track,'/los_samp',iint,'.mat'],'sampled_insar_data','rms_out','dem_out');
    
    [h0,h1,h2]=plot_insar_sample_new(xin,yin,losin,zout,xx1,xx2,yy1,yy2,'fault',fault_file); 
    set(h0,'PaperPositionMode','auto');
